@@ -27,7 +27,7 @@ const cellStateToClassName = {
 }
 
 const cellValueToText = value =>
-  value === CELL_UNKNOWN_CLEAR
+  value === CELL_UNKNOWN_CLEAR || value === CELL_KNOWN_CLEAR
     ? ''
     : value
 
