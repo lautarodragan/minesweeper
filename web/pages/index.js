@@ -9,7 +9,7 @@ const CELL_UNKNOWN_MINE = 1
 const CELL_KNOWN_CLEAR = 2
 const CELL_KNOWN_MINE = 3
 
-const makeEmptyBoard = (width, height) => Array(width).fill(null).map(y => Array(height).fill(0))
+const makeEmptyBoard = (width, height) => Array(width).fill(null).map(y => Array(height).fill(CELL_UNKNOWN_CLEAR))
 
 const mapBoard = (board, callback) => board.map((columnCells, y) => columnCells.map((cell, x) => callback(x, y, cell)))
 
@@ -25,6 +25,11 @@ const cellStateToClassName = {
   [CELL_KNOWN_CLEAR]: 'clear',
   [CELL_KNOWN_MINE]: 'mine',
 }
+
+const cellValueToText = value =>
+  value === CELL_UNKNOWN_CLEAR
+    ? ''
+    : value
 
 export default function Home() {
   const [board, setBoard] = useState(makeBoard(boardWidth, boardHeight))
@@ -58,7 +63,7 @@ export default function Home() {
           { 
             board.map((columnCells, y) => (
               columnCells.map((cell, x) => (
-                <div key={`${x}, ${y}`} title={`(${x}, ${y}) ${cell}`} onClick={() => onClick(x, y, cell)} className={cellStateToClassName[cell]}>{cell}</div>
+                <div key={`${x}, ${y}`} title={`(${x}, ${y}) ${cell}`} onClick={() => onClick(x, y, cell)} className={cellStateToClassName[cell]}>{cellValueToText(cell)}</div>
               ))
             ))
           }
