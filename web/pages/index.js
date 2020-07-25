@@ -92,8 +92,12 @@ export default function Home() {
           border-right: 3px solid #808080;
         }
 
+        section.board div.unknown:active {
+          border: 0.5px solid #808080;
+        }
+
         section.board div.clear {
-          border: 1px solid #808080;
+          border: 0.5px solid #808080;
         }
 
         .container {
