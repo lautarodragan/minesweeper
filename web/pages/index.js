@@ -29,13 +29,20 @@ const cellStateToClassName = {
 export default function Home() {
   const [board, setBoard] = useState(makeBoard(boardWidth, boardHeight))
 
+  const setCell = (x, y, value) => setBoard(mapBoard(board, (x2, y2, value2) => (
+    x === x2 && y === y2 
+      ? value
+      : value2
+  )))
+
   const onClick = (x, y, value) => {
     console.log('Clicked on cell at ', x, y, value)
     if (value === CELL_UNKNOWN_CLEAR) {
       console.log('We are fine!')
-
+      setCell(x, y, CELL_KNOWN_CLEAR)
     } else if (value === CELL_UNKNOWN_MINE) {
       console.log('Bang!')
+      setCell(x, y, CELL_KNOWN_MINE)
     }
   }
 
