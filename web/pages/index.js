@@ -3,9 +3,33 @@ import Head from 'next/head'
 const boardWidth = 16
 const boardHeight = 16
 
-const board = Array(boardHeight).fill(null).map(y => Array(boardWidth).fill(0))
+const CELL_UNKNOWN_CLEAR = 0
+const CELL_UNKNOWN_MINE = 1
+const CELL_KNOWN_CLEAR = 2
+const CELL_KNOWN_MINE = 3
+
+const makeEmptyBoard = (width, height) => Array(width).fill(null).map(y => Array(height).fill(0))
+
+const mapBoard = (board, callback) => board.map((columnCells, y) => columnCells.map((cell, x) => callback(x, y, cell)))
+
+const makeBoard = (width, height, mineChance = .05) => 
+  mapBoard(
+    makeEmptyBoard(width, height), 
+    () => Math.random() < mineChance ? CELL_UNKNOWN_MINE : CELL_UNKNOWN_CLEAR,
+  )
+
+const board = makeBoard(boardWidth, boardHeight)
 
 export default function Home() {
+  const onClick = (x, y, value) => {
+    console.log('Clicked on cell at ', x, y, value)
+    if (value === CELL_UNKNOWN_CLEAR) {
+      console.log('We are fine!')
+    } else if (value === CELL_UNKNOWN_MINE) {
+      console.log('Bang!')
+    }
+  }
+
   return (
     <div className="container">
       <Head>
@@ -18,7 +42,7 @@ export default function Home() {
           { 
             board.map((columnCells, y) => (
               columnCells.map((cell, x) => (
-                <div title={`(${x}, ${y}) ${cell}`}></div>
+                <div title={`(${x}, ${y}) ${cell}`} onClick={() => onClick(x, y, cell)} >{cell}</div>
               ))
             ))
           }
