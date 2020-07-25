@@ -20,6 +20,13 @@ const makeBoard = (width, height, mineChance = .05) =>
 
 const board = makeBoard(boardWidth, boardHeight)
 
+const cellStateToClassName = {
+  [CELL_UNKNOWN_CLEAR]: 'unknown',
+  [CELL_UNKNOWN_MINE]: 'unknown',
+  [CELL_KNOWN_CLEAR]: 'clear',
+  [CELL_KNOWN_MINE]: 'mine',
+}
+
 export default function Home() {
   const onClick = (x, y, value) => {
     console.log('Clicked on cell at ', x, y, value)
@@ -42,7 +49,7 @@ export default function Home() {
           { 
             board.map((columnCells, y) => (
               columnCells.map((cell, x) => (
-                <div title={`(${x}, ${y}) ${cell}`} onClick={() => onClick(x, y, cell)} >{cell}</div>
+                <div key={`${x}, ${y}`} title={`(${x}, ${y}) ${cell}`} onClick={() => onClick(x, y, cell)} className={cellStateToClassName[cell]}>{cell}</div>
               ))
             ))
           }
@@ -56,10 +63,23 @@ export default function Home() {
         }
 
         section.board div {
-          width: 20px;
-          height: 20px;
-          background-color: red;
-          border: 1px solid white;
+          width: 30px;
+          height: 30px;
+          background-color: #c0c0c0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        section.board div.unknown {
+          border-top: 3px solid #fff;
+          border-left: 3px solid #fff;
+          border-bottom: 3px solid #808080;
+          border-right: 3px solid #808080;
+        }
+
+        section.board div.clear {
+          border: 1px solid #808080;
         }
 
         .container {
