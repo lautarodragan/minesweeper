@@ -21,7 +21,11 @@ Minesweeper is a game with pretty simple mechanics. If you click on a mine, it's
 
 ### Challenge 1: Recursion
 
-The only challenging mechanic is triggered when you click on an empty cell: all surrounding empty cells must be cleared, and so on. This is simple recursion, the same used by the Flood Fill of MS Paint and other simple paint programs. Luckily I've already implemented this in the past while developing game engines — flood fill is an useful tool when editting 2D top-down RPG maps. The hidden challenge in the recursion is an easily reachable stack overflow, which can be avoided controlling the max depth of recursive calls, storing temporary state in a list. There are probably more efficient solutions to the problem, but this one works pretty well. If the board is small the stack overflow may not even be a problem, though.
+The only challenging mechanic is triggered when you click on an empty cell: all surrounding empty cells must be cleared, and so on. This is simple recursion, the same used by the [Flood Fill](https://en.wikipedia.org/wiki/Flood_fill) of MS Paint and other simple paint programs. 
+
+Luckily I've already implemented this in the past while developing game engines — flood fill is an useful tool when editting 2D top-down RPG maps. The hidden challenge in the recursion is an easily reachable stack overflow, which can be avoided controlling the max depth of recursive calls and storing temporary state in a list. 
+
+In all likelyhood there are way more efficient solutions to this problem, but this one works pretty well. If the board is small the stack overflow may not even be a problem.
 
 Doing this recursion server-side at scale would probably be a huge challenge, which would require research and experimentation. But we're not going for scalability right now.
 
