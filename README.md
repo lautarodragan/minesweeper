@@ -4,7 +4,7 @@ Solution to the Amazon challenge by Deviget.
 
 The challenge only requires an API, but I used to love minesweeper as a child, before I had internet, and this seems like a really fun challenge, so I decided to implement a frontend for it.
 
-I'm not spending a lot of time in code quality or aesthetics in the frontend though, as it's just an extra and I'm pretty short on time. I decided to go with next due to the simplicity of the framework, and avoid TypeScript because the complexity is going to stay pretty low and I'm going to be working on my own on it. 🤠 Yee-haw!
+I'm not spending a lot of time in code quality or aesthetics in the frontend though, as it's just an extra and I'm pretty short on time. I decided to go with next due to the simplicity of the framework, and to skip TypeScript because the complexity is going to stay pretty low and I'm going to be working on my own on it. 🤠 Yee-haw!
 
 ## Plan
 
