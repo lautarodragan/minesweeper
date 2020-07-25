@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import React, { useState } from 'react'
 
 const boardWidth = 16
 const boardHeight = 16
@@ -18,8 +19,6 @@ const makeBoard = (width, height, mineChance = .05) =>
     () => Math.random() < mineChance ? CELL_UNKNOWN_MINE : CELL_UNKNOWN_CLEAR,
   )
 
-const board = makeBoard(boardWidth, boardHeight)
-
 const cellStateToClassName = {
   [CELL_UNKNOWN_CLEAR]: 'unknown',
   [CELL_UNKNOWN_MINE]: 'unknown',
@@ -28,10 +27,13 @@ const cellStateToClassName = {
 }
 
 export default function Home() {
+  const [board, setBoard] = useState(makeBoard(boardWidth, boardHeight))
+
   const onClick = (x, y, value) => {
     console.log('Clicked on cell at ', x, y, value)
     if (value === CELL_UNKNOWN_CLEAR) {
       console.log('We are fine!')
+
     } else if (value === CELL_UNKNOWN_MINE) {
       console.log('Bang!')
     }
