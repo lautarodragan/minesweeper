@@ -83,7 +83,7 @@ export default function Home() {
   const getClassNameForCell = (x, y, value) => {
     if (lostPosition && lostPosition.x === x && lostPosition.y === y)
       return 'lost'
-    if (magicPosition && magicPosition.x === x && magicPosition.y === y)
+    if (magicPosition && magicPosition.x >= x - 1 && magicPosition.x <= x + 1 && magicPosition.y >= y - 1 && magicPosition.y <= y + 1)
       return 'clear'
     if (lostPosition && value === CELL_UNKNOWN_MINE )
       return 'mine'
