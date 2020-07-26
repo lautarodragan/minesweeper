@@ -13,15 +13,15 @@ const makeEmptyBoard = (width, height) => Array(width).fill(null).map(y => Array
 
 const mapBoard = (board, callback) => board.map((columnCells, y) => columnCells.map((cell, x) => callback(x, y, cell)))
 
-const makeBoard = (width, height, mineChance = .05) => 
+const makeBoard = (width, height, mineChance = .05) =>
   mapBoard(
-    makeEmptyBoard(width, height), 
+    makeEmptyBoard(width, height),
     () => Math.random() < mineChance ? CELL_UNKNOWN_MINE : CELL_UNKNOWN_CLEAR,
   )
 
 const cellStateToClassName = {
   [CELL_UNKNOWN_CLEAR]: 'unknown',
-  [CELL_UNKNOWN_MINE]: 'unknown',
+  [CELL_UNKNOWN_MINE]: 'mine',
   [CELL_KNOWN_CLEAR]: 'clear',
   [CELL_KNOWN_MINE]: 'mine',
 }
@@ -33,22 +33,45 @@ const cellValueToText = value =>
 
 export default function Home() {
   const [board, setBoard] = useState(makeBoard(boardWidth, boardHeight))
+  const [lostPosition, setLostPosition] = useState(null)
 
   const setCell = (x, y, value) => setBoard(mapBoard(board, (x2, y2, value2) => (
-    x === x2 && y === y2 
+    x === x2 && y === y2
       ? value
       : value2
   )))
 
   const onClick = (x, y, value) => {
     console.log('Clicked on cell at ', x, y, value)
+
+    if (lostPosition) {
+      console.log('You are dead already!')
+      return
+    }
+
     if (value === CELL_UNKNOWN_CLEAR) {
       console.log('We are fine!')
       setCell(x, y, CELL_KNOWN_CLEAR)
     } else if (value === CELL_UNKNOWN_MINE) {
       console.log('Bang!')
       setCell(x, y, CELL_KNOWN_MINE)
+      setLostPosition({ x, y })
     }
+  }
+
+  const onContextMenu = (event) => {
+    event.preventDefault()
+  }
+
+  const onMouseDown = (x, y, value) => (event) => {
+    event.preventDefault()
+    console.log('onMouseDown', event.button, event.buttons, { x, y, value })
+  }
+
+  const getClassNameForCell = (x, y, value) => {
+    if (lostPosition && lostPosition.x === x && lostPosition.y === y)
+      return 'lost'
+    return cellStateToClassName[value]
   }
 
   return (
@@ -60,10 +83,17 @@ export default function Home() {
 
       <main>
         <section className="board">
-          { 
+          {
             board.map((columnCells, y) => (
               columnCells.map((cell, x) => (
-                <div key={`${x}, ${y}`} title={`(${x}, ${y}) ${cell}`} onClick={() => onClick(x, y, cell)} className={cellStateToClassName[cell]}>{cellValueToText(cell)}</div>
+                <div
+                  key={`${x}, ${y}`}
+                  title={`(${x}, ${y}) ${cell}`}
+                  onClick={() => onClick(x, y, cell)}
+                  onContextMenuCapture={onContextMenu}
+                  onMouseDown={onMouseDown(x, y, cell)}
+                  className={getClassNameForCell(x, y, cell)}
+                ></div>
               ))
             ))
           }
@@ -98,6 +128,17 @@ export default function Home() {
 
         section.board div.clear {
           border: 0.5px solid #808080;
+        }
+
+        section.board div.mine {
+          background-image: url(/mine.png);
+          background-size: contain;
+        }
+
+        section.board div.lost {
+          background-image: url(/mine.png);
+          background-size: contain;
+          background-color: red;
         }
 
         .container {
