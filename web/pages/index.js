@@ -51,7 +51,7 @@ const getSurroundingMineCount = (board, x, y) => {
   let sum = 0
   for (let j = Math.max(0, y - 1); j < Math.min(board.length, y + 2); j++)
     for (let i = Math.max(0, x - 1); i < Math.min(board[0].length, x + 2); i++)
-      if (x !== i && y !== j && [CELL_UNKNOWN_MINE, CELL_KNOWN_MINE].includes(board[j][i]))
+      if ((x !== i || y !== j) && [CELL_UNKNOWN_MINE, CELL_KNOWN_MINE].includes(board[j][i]))
         sum++;
   return sum
 }
@@ -113,6 +113,7 @@ export default function Home() {
   const onMouseUp = (x, y, value) => (event) => {
     event.preventDefault()
     setMagicPosition(null)
+    console.log('getSurroundingMineCount', x, y, value, getSurroundingMineCount(board, x, y))
   }
 
   const getClassNameForCell = (x, y, value) => {
