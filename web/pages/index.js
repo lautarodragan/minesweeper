@@ -47,10 +47,23 @@ const makeBoard = (width, height, mineCount = 40) => {
   )
 }
 
-const cellValueToText = value =>
-  value === CELL_UNKNOWN_CLEAR || value === CELL_KNOWN_CLEAR
-    ? ''
-    : value
+const getSurroundingMineCount = (board, x, y) => {
+  let sum = 0
+  for (let j = Math.max(0, y - 1); j < Math.min(board.length, j + 1); j++)
+    for (let i = Math.max(0, x - 1); i < Math.min(board[0].length, x + 1); i++)
+      if (x !== i && y !== j && [CELL_UNKNOWN_MINE, CELL_KNOWN_MINE].includes(board[j][i]))
+        sum++;
+  return sum
+}
+
+const getCellText = (board, x, y) => {
+  if (board[y][x] === CELL_KNOWN_MINE)
+    return ''
+  const surroundingMineCount = getSurroundingMineCount(board, x, y)
+  if (surroundingMineCount < 1)
+    return ''
+  return surroundingMineCount
+}
 
 export default function Home() {
   const [board, setBoard] = useState(makeBoard(boardWidth, boardHeight))
@@ -137,7 +150,9 @@ export default function Home() {
                   onMouseMove={onMouseMove(x, y, cell)}
                   onMouseUp={onMouseUp(x, y, cell)}
                   className={getClassNameForCell(x, y, cell)}
-                ></div>
+                >
+                  {getCellText(board, x, y)}
+                </div>
               ))
             ))
           }
