@@ -25,13 +25,6 @@ const makeBoard = (width, height, mineChance = .05) =>
     () => Math.random() < mineChance ? CELL_UNKNOWN_MINE : CELL_UNKNOWN_CLEAR,
   )
 
-const cellStateToClassName = {
-  [CELL_UNKNOWN_CLEAR]: 'unknown',
-  [CELL_UNKNOWN_MINE]: 'mine',
-  [CELL_KNOWN_CLEAR]: 'clear',
-  [CELL_KNOWN_MINE]: 'mine',
-}
-
 const cellValueToText = value =>
   value === CELL_UNKNOWN_CLEAR || value === CELL_KNOWN_CLEAR
     ? ''
@@ -40,6 +33,7 @@ const cellValueToText = value =>
 export default function Home() {
   const [board, setBoard] = useState(makeBoard(boardWidth, boardHeight))
   const [lostPosition, setLostPosition] = useState(null)
+  const [magicPosition, setMagicPosition] = useState(null)
 
   const setCell = (x, y, value) => setBoard(mapBoard(board, (x2, y2, value2) => (
     x === x2 && y === y2
@@ -70,14 +64,31 @@ export default function Home() {
   }
 
   const onMouseDown = (x, y, value) => (event) => {
-    event.preventDefault()
-    console.log('onMouseDown', event.button, event.buttons, { x, y, value })
+    if (event.buttons === 3)
+      setMagicPosition({ x, y })
+  }
+
+  const onMouseMove = (x, y, value) => (event) => {
+    if (event.buttons === 3)
+      setMagicPosition({ x, y })
+  }
+
+  const onMouseUp = (x, y, value) => (event) => {
+    setMagicPosition(null)
   }
 
   const getClassNameForCell = (x, y, value) => {
     if (lostPosition && lostPosition.x === x && lostPosition.y === y)
       return 'lost'
-    return cellStateToClassName[value]
+    if (magicPosition && magicPosition.x === x && magicPosition.y === y)
+      return 'clear'
+    if (lostPosition && value === CELL_UNKNOWN_MINE )
+      return 'mine'
+    if (!lostPosition && value === CELL_UNKNOWN_MINE)
+      return 'unknown mine'
+    if (value === CELL_KNOWN_CLEAR)
+      return 'clear'
+    return 'unknown'
   }
 
   return (
@@ -98,6 +109,8 @@ export default function Home() {
                   onClick={() => onClick(x, y, cell)}
                   onContextMenuCapture={onContextMenu}
                   onMouseDown={onMouseDown(x, y, cell)}
+                  onMouseMove={onMouseMove(x, y, cell)}
+                  onMouseUp={onMouseUp(x, y, cell)}
                   className={getClassNameForCell(x, y, cell)}
                 ></div>
               ))
@@ -137,6 +150,11 @@ export default function Home() {
         }
 
         section.board div.mine {
+          background-image: url(/mine.png);
+          background-size: contain;
+        }
+
+        section.board div.unknown-mine {
           background-image: url(/mine.png);
           background-size: contain;
         }
