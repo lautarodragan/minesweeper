@@ -1,4 +1,10 @@
 import Head from 'next/head'
+import dynamic from "next/dynamic";
+
+const NoSsr = dynamic(() => Promise.resolve(({ children }) => <>{children}</>), {
+  ssr: false
+})
+
 import React, { useState } from 'react'
 
 const boardWidth = 16
@@ -81,7 +87,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
+      <NoSsr>
         <section className="board">
           {
             board.map((columnCells, y) => (
@@ -98,7 +104,7 @@ export default function Home() {
             ))
           }
         </section>
-      </main>
+      </NoSsr>
 
       <style jsx>{`
         section.board {
