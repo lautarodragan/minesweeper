@@ -19,11 +19,33 @@ const makeEmptyBoard = (width, height) => Array(width).fill(null).map(y => Array
 
 const mapBoard = (board, callback) => board.map((columnCells, y) => columnCells.map((cell, x) => callback(x, y, cell)))
 
-const makeBoard = (width, height, mineChance = .05) =>
-  mapBoard(
+const makeMines = (width, height, mineCount) => {
+  const mines = []
+
+  while (mines.length < mineCount) {
+    let newMine
+
+    while (!newMine || mines.find(mine => mine.x === newMine.x && mine.y === newMine.y)) {
+      newMine = {
+        x: Math.floor(Math.random() * width),
+        y: Math.floor(Math.random() * height),
+      }
+    }
+
+    mines.push(newMine)
+  }
+
+  return mines
+}
+
+const makeBoard = (width, height, mineCount = 40) => {
+  const mines = makeMines(width, height, mineCount)
+
+  return mapBoard(
     makeEmptyBoard(width, height),
-    () => Math.random() < mineChance ? CELL_UNKNOWN_MINE : CELL_UNKNOWN_CLEAR,
+    (x, y) => mines.some(mine => mine.x === x && mine.y === y) ? CELL_UNKNOWN_MINE : CELL_UNKNOWN_CLEAR,
   )
+}
 
 const cellValueToText = value =>
   value === CELL_UNKNOWN_CLEAR || value === CELL_KNOWN_CLEAR
