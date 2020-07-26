@@ -57,7 +57,7 @@ const getSurroundingMineCount = (board, x, y) => {
 }
 
 const getCellText = (board, x, y) => {
-  if (board[y][x] === CELL_KNOWN_MINE)
+  if (board[y][x] !== CELL_KNOWN_CLEAR)
     return ''
   const surroundingMineCount = getSurroundingMineCount(board, x, y)
   if (surroundingMineCount < 1)
