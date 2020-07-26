@@ -64,16 +64,19 @@ export default function Home() {
   }
 
   const onMouseDown = (x, y, value) => (event) => {
+    event.preventDefault()
     if (event.buttons === 3)
       setMagicPosition({ x, y })
   }
 
   const onMouseMove = (x, y, value) => (event) => {
+    event.preventDefault()
     if (event.buttons === 3)
       setMagicPosition({ x, y })
   }
 
   const onMouseUp = (x, y, value) => (event) => {
+    event.preventDefault()
     setMagicPosition(null)
   }
 
