@@ -77,18 +77,14 @@ const recursiveSolve = (board, x, y) => {
     newBoard[y][x] = CELL_KNOWN_CLEAR
     if (getSurroundingMineCount(board, x, y))
       return
-    if (x < width - 1 && newBoard[y][x + 1] === CELL_UNKNOWN_CLEAR) {
+    if (x < width - 1 && newBoard[y][x + 1] === CELL_UNKNOWN_CLEAR)
       recursive(x + 1, y)
-    }
-    if (x > 0 && newBoard[y][x - 1] === CELL_UNKNOWN_CLEAR) {
+    if (x > 0 && newBoard[y][x - 1] === CELL_UNKNOWN_CLEAR)
       recursive(x - 1, y)
-    }
-    if (y < height - 1 && newBoard[y + 1][x] === CELL_UNKNOWN_CLEAR) {
+    if (y < height - 1 && newBoard[y + 1][x] === CELL_UNKNOWN_CLEAR)
       recursive(x, y + 1)
-    }
-    if (y > 0 && newBoard[y - 1][x] === CELL_UNKNOWN_CLEAR) {
+    if (y > 0 && newBoard[y - 1][x] === CELL_UNKNOWN_CLEAR)
       recursive(x, y - 1)
-    }
   }
 
   recursive(x, y)
