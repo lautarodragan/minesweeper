@@ -112,11 +112,8 @@ export default function Home() {
     }
 
     if (value === CELL_UNKNOWN_CLEAR) {
-      console.log('We are fine!')
-      // setCell(x, y, CELL_KNOWN_CLEAR)
       setBoard(recursiveSolve(board, x, y))
     } else if (value === CELL_UNKNOWN_MINE) {
-      console.log('Bang!')
       setCell(x, y, CELL_KNOWN_MINE)
       setLostPosition({ x, y })
     }
