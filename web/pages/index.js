@@ -96,6 +96,7 @@ export default function Home() {
   const [board, setBoard] = useState(makeBoard(boardWidth, boardHeight))
   const [lostPosition, setLostPosition] = useState(null)
   const [magicPosition, setMagicPosition] = useState(null)
+  const [cheatSeeMines, setCheatSeeMines] = useState(false)
 
   const setCell = (x, y, value) => setBoard(mapBoard(board, (x2, y2, value2) => (
     x === x2 && y === y2
@@ -149,7 +150,7 @@ export default function Home() {
     if (lostPosition && value === CELL_UNKNOWN_MINE )
       return 'mine'
     if (!lostPosition && value === CELL_UNKNOWN_MINE)
-      return 'unknown mine'
+      return cheatSeeMines ? 'unknown mine' : 'unknown'
     if (value === CELL_KNOWN_CLEAR)
       return 'clear'
     return 'unknown'
@@ -182,6 +183,12 @@ export default function Home() {
               ))
             ))
           }
+        </section>
+        <section>
+          <div className="checkbox">
+            <input id="cheat-see-mines" type="checkbox" value={cheatSeeMines} onChange={() => setCheatSeeMines(!cheatSeeMines)} />
+            <label for="cheat-see-mines">Cheat: See Mines</label>
+          </div>
         </section>
       </NoSsr>
 
@@ -229,6 +236,13 @@ export default function Home() {
           background-image: url(/mine.png);
           background-size: contain;
           background-color: red;
+        }
+        
+        .checkbox {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
         }
 
         .container {
