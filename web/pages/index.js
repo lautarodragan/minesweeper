@@ -14,6 +14,8 @@ const CELL_UNKNOWN_CLEAR = 0
 const CELL_UNKNOWN_MINE = 1
 const CELL_KNOWN_CLEAR = 2
 const CELL_KNOWN_MINE = 3
+const CELL_UNKNOWN_CLEAR_FLAG = 4
+const CELL_UNKNOWN_MINE_FLAG = 5
 
 const makeEmptyBoard = (width, height) => Array(width).fill(null).map(y => Array(height).fill(CELL_UNKNOWN_CLEAR))
 
@@ -53,7 +55,7 @@ const getSurroundingMineCount = (board, x, y) => {
   let sum = 0
   for (let j = Math.max(0, y - 1); j < Math.min(board.length, y + 2); j++)
     for (let i = Math.max(0, x - 1); i < Math.min(board[0].length, x + 2); i++)
-      if ((x !== i || y !== j) && [CELL_UNKNOWN_MINE, CELL_KNOWN_MINE].includes(board[j][i]))
+      if ((x !== i || y !== j) && [CELL_UNKNOWN_MINE, CELL_KNOWN_MINE, CELL_UNKNOWN_MINE_FLAG].includes(board[j][i]))
         sum++;
   return sum
 }
@@ -120,8 +122,16 @@ export default function Home() {
     }
   }
 
-  const onContextMenu = (event) => {
+  const onContextMenu = (x, y) => (event) => {
     event.preventDefault()
+    if (board[y][x] === CELL_UNKNOWN_CLEAR)
+      setCell(x, y, CELL_UNKNOWN_CLEAR_FLAG)
+    else if (board[y][x] === CELL_UNKNOWN_MINE)
+      setCell(x, y, CELL_UNKNOWN_MINE_FLAG)
+    else if (board[y][x] === CELL_UNKNOWN_CLEAR_FLAG)
+      setCell(x, y, CELL_UNKNOWN_CLEAR)
+    else if (board[y][x] === CELL_UNKNOWN_MINE_FLAG)
+      setCell(x, y, CELL_UNKNOWN_MINE)
   }
 
   const onMouseDown = (x, y, value) => (event) => {
@@ -153,6 +163,8 @@ export default function Home() {
       return cheatSeeMines ? 'unknown mine' : 'unknown'
     if (value === CELL_KNOWN_CLEAR)
       return 'clear'
+    if (value === CELL_UNKNOWN_CLEAR_FLAG || value === CELL_UNKNOWN_MINE_FLAG)
+      return 'unknown flag'
     return 'unknown'
   }
 
@@ -172,7 +184,7 @@ export default function Home() {
                   key={`${x}, ${y}`}
                   title={`(${x}, ${y}) ${cell}`}
                   onClick={() => onClick(x, y, cell)}
-                  onContextMenuCapture={onContextMenu}
+                  onContextMenuCapture={onContextMenu(x, y)}
                   onMouseDown={onMouseDown(x, y, cell)}
                   onMouseMove={onMouseMove(x, y, cell)}
                   onMouseUp={onMouseUp(x, y, cell)}
@@ -236,6 +248,11 @@ export default function Home() {
           background-image: url(/mine.png);
           background-size: contain;
           background-color: red;
+        }
+
+        section.board div.flag {
+          background-image: url(/flag.png);
+          background-size: contain;
         }
         
         .checkbox {
