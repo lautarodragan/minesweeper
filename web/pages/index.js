@@ -43,8 +43,6 @@ export default function Home() {
   )))
 
   const onClick = (x, y, value) => {
-    console.log('Clicked on cell at ', x, y, value)
-
     if (lostPosition) {
       return
     }
@@ -85,8 +83,6 @@ export default function Home() {
     event.preventDefault()
     setMagicPosition(null)
 
-    console.log('onMouseUp', event.buttons, event.button)
-
     if (event.button !== 0 || board[y][x] !== CELL_KNOWN_CLEAR)
       return
 
@@ -96,7 +92,6 @@ export default function Home() {
       return
 
     const surroundingFlagCount = getSurroundingFlagCount(board, x, y)
-    console.log('onMouseUp getSurroundingMineCount surroundingFlagCount', x, y, value, surroundingMineCount, surroundingFlagCount)
 
     if (surroundingMineCount !== surroundingFlagCount)
       return
