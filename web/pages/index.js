@@ -259,7 +259,7 @@ export default function Home() {
         <section>
           <div className="checkbox">
             <input id="cheat-see-mines" type="checkbox" value={cheatSeeMines} onChange={() => setCheatSeeMines(!cheatSeeMines)} />
-            <label for="cheat-see-mines">Cheat: See Mines</label>
+            <label htmlFor="cheat-see-mines">Cheat: See Mines</label>
           </div>
         </section>
       </NoSsr>
