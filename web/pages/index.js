@@ -18,9 +18,6 @@ const NoSsr = dynamic(() => Promise.resolve(({ children }) => <>{children}</>), 
   ssr: false
 })
 
-const boardWidth = 16
-const boardHeight = 16
-
 const getCellText = (board, x, y) => {
   if (board[y][x] !== CELL_KNOWN_CLEAR)
     return ''
@@ -31,6 +28,8 @@ const getCellText = (board, x, y) => {
 }
 
 export default function Home() {
+  const [boardWidth, setBoardWidth] = useState(16)
+  const [boardHeight, setBoardHeight] = useState(16)
   const [board, setBoard] = useState(makeBoard(boardWidth, boardHeight))
   const [lostPosition, setLostPosition] = useState(null)
   const [sweeperPosition, setSweeperPosition] = useState(null)
