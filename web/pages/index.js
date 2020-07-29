@@ -196,12 +196,12 @@ export default function Home() {
       return
     }
 
-    const newBoard = cloneBoard(board)
+    let newBoard = cloneBoard(board)
 
     for (let i = Math.max(0, x - 1); i < Math.min(x + 2, boardWidth); i++)
       for (let j = Math.max(0, y - 1); j < Math.min(y + 2, boardHeight); j++) {
         if (board[j][i] === CELL_UNKNOWN_CLEAR)
-          newBoard[j][i] = CELL_KNOWN_CLEAR
+          newBoard = recursiveSolve(newBoard, i, j)
       }
 
     setBoard(newBoard)
