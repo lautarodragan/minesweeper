@@ -1,73 +1,25 @@
 import Head from 'next/head'
-import dynamic from "next/dynamic";
+import dynamic from 'next/dynamic'
+import React, { useState } from 'react'
+
+import {
+  CELL_KNOWN_CLEAR,
+  CELL_KNOWN_MINE,
+  CELL_UNKNOWN_CLEAR,
+  CELL_UNKNOWN_CLEAR_FLAG,
+  CELL_UNKNOWN_MINE,
+  CELL_UNKNOWN_MINE_FLAG
+} from './cell'
+import {getSurroundingFlagCount, getSurroundingMineCount, makeBoard, mapBoard} from './board'
+import { recursiveSolve } from './solve'
+import { sweep, getSweepLosePosition } from './sweep'
 
 const NoSsr = dynamic(() => Promise.resolve(({ children }) => <>{children}</>), {
   ssr: false
 })
 
-import React, { useState } from 'react'
-
 const boardWidth = 16
 const boardHeight = 16
-
-const CELL_UNKNOWN_CLEAR = 0
-const CELL_UNKNOWN_MINE = 1
-const CELL_KNOWN_CLEAR = 2
-const CELL_KNOWN_MINE = 3
-const CELL_UNKNOWN_CLEAR_FLAG = 4
-const CELL_UNKNOWN_MINE_FLAG = 5
-
-const makeEmptyBoard = (width, height) => Array(width).fill(null).map(y => Array(height).fill(CELL_UNKNOWN_CLEAR))
-
-const mapBoard = (board, callback) => board.map((columnCells, y) => columnCells.map((cell, x) => callback(x, y, cell)))
-
-const cloneBoard = (board) => mapBoard(board, (x, y, value) => value)
-
-const makeMines = (width, height, mineCount) => {
-  const mines = []
-
-  while (mines.length < mineCount) {
-    let newMine
-
-    while (!newMine || mines.find(mine => mine.x === newMine.x && mine.y === newMine.y)) {
-      newMine = {
-        x: Math.floor(Math.random() * width),
-        y: Math.floor(Math.random() * height),
-      }
-    }
-
-    mines.push(newMine)
-  }
-
-  return mines
-}
-
-const makeBoard = (width, height, mineCount = 40) => {
-  const mines = makeMines(width, height, mineCount)
-
-  return mapBoard(
-    makeEmptyBoard(width, height),
-    (x, y) => mines.some(mine => mine.x === x && mine.y === y) ? CELL_UNKNOWN_MINE : CELL_UNKNOWN_CLEAR,
-  )
-}
-
-const getSurroundingMineCount = (board, x, y) => {
-  let sum = 0
-  for (let j = Math.max(0, y - 1); j < Math.min(board.length, y + 2); j++)
-    for (let i = Math.max(0, x - 1); i < Math.min(board[0].length, x + 2); i++)
-      if ((x !== i || y !== j) && [CELL_UNKNOWN_MINE, CELL_KNOWN_MINE, CELL_UNKNOWN_MINE_FLAG].includes(board[j][i]))
-        sum++;
-  return sum
-}
-
-const getSurroundingFlagCount = (board, x, y) => {
-  let sum = 0
-  for (let j = Math.max(0, y - 1); j < Math.min(board.length, y + 2); j++)
-    for (let i = Math.max(0, x - 1); i < Math.min(board[0].length, x + 2); i++)
-      if ((x !== i || y !== j) && [CELL_UNKNOWN_MINE_FLAG, CELL_UNKNOWN_CLEAR_FLAG].includes(board[j][i]))
-        sum++;
-  return sum
-}
 
 const getCellText = (board, x, y) => {
   if (board[y][x] !== CELL_KNOWN_CLEAR)
@@ -76,56 +28,6 @@ const getCellText = (board, x, y) => {
   if (surroundingMineCount < 1)
     return ''
   return surroundingMineCount
-}
-
-const recursiveSolve = (board, x, y) => {
-  const newBoard = cloneBoard(board)
-
-  const width = board[0].length
-  const height = board.length
-
-  const recursive = (x, y) => {
-    newBoard[y][x] = CELL_KNOWN_CLEAR
-    if (getSurroundingMineCount(board, x, y))
-      return
-    if (x < width - 1 && newBoard[y][x + 1] === CELL_UNKNOWN_CLEAR)
-      recursive(x + 1, y)
-    if (x > 0 && newBoard[y][x - 1] === CELL_UNKNOWN_CLEAR)
-      recursive(x - 1, y)
-    if (y < height - 1 && newBoard[y + 1][x] === CELL_UNKNOWN_CLEAR)
-      recursive(x, y + 1)
-    if (y > 0 && newBoard[y - 1][x] === CELL_UNKNOWN_CLEAR)
-      recursive(x, y - 1)
-  }
-
-  recursive(x, y)
-
-  return newBoard
-}
-
-const sweep = (board, x, y) => {
-  const boardWidth = board[0].length
-  const boardHeight = board.length
-
-  let newBoard = cloneBoard(board)
-
-  for (let i = Math.max(0, x - 1); i < Math.min(x + 2, boardWidth); i++)
-    for (let j = Math.max(0, y - 1); j < Math.min(y + 2, boardHeight); j++) {
-      if (board[j][i] === CELL_UNKNOWN_CLEAR)
-        newBoard = recursiveSolve(newBoard, i, j)
-    }
-
-  return newBoard
-}
-
-const getSweepLosePosition = (board, x, y) => {
-  const boardWidth = board[0].length
-  const boardHeight = board.length
-  for (let i = Math.max(0, x - 1); i < Math.min(x + 2, boardWidth); i++)
-    for (let j = Math.max(0, y - 1); j < Math.min(y + 2, boardHeight); j++)
-      if (board[j][i] === CELL_UNKNOWN_MINE)
-        return { x: i, y: j }
-  return null
 }
 
 export default function Home() {
