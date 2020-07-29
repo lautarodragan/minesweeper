@@ -33,7 +33,7 @@ const getCellText = (board, x, y) => {
 export default function Home() {
   const [board, setBoard] = useState(makeBoard(boardWidth, boardHeight))
   const [lostPosition, setLostPosition] = useState(null)
-  const [magicPosition, setMagicPosition] = useState(null)
+  const [sweeperPosition, setSweeperPosition] = useState(null)
   const [cheatSeeMines, setCheatSeeMines] = useState(false)
 
   const setCell = (x, y, value) => setBoard(mapBoard(board, (x2, y2, value2) => (
@@ -70,18 +70,18 @@ export default function Home() {
   const onMouseDown = (x, y, value) => (event) => {
     event.preventDefault()
     if (event.buttons === 3)
-      setMagicPosition({ x, y })
+      setSweeperPosition({ x, y })
   }
 
   const onMouseMove = (x, y, value) => (event) => {
     event.preventDefault()
     if (event.buttons === 3)
-      setMagicPosition({ x, y })
+      setSweeperPosition({ x, y })
   }
 
   const onMouseUp = (x, y, value) => (event) => {
     event.preventDefault()
-    setMagicPosition(null)
+    setSweeperPosition(null)
 
     if (event.button !== 0 || board[y][x] !== CELL_KNOWN_CLEAR)
       return
@@ -110,11 +110,11 @@ export default function Home() {
     if (lostPosition && lostPosition.x === x && lostPosition.y === y)
       return 'lost'
     if ((value === CELL_UNKNOWN_MINE || value === CELL_UNKNOWN_CLEAR)
-      && magicPosition
-      && magicPosition.x >= x - 1
-      && magicPosition.x <= x + 1
-      && magicPosition.y >= y - 1
-      && magicPosition.y <= y + 1)
+      && sweeperPosition
+      && sweeperPosition.x >= x - 1
+      && sweeperPosition.x <= x + 1
+      && sweeperPosition.y >= y - 1
+      && sweeperPosition.y <= y + 1)
       return 'clear'
     if (lostPosition && value === CELL_UNKNOWN_MINE )
       return 'mine'
