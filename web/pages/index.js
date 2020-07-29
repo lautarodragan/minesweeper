@@ -134,7 +134,6 @@ export default function Home() {
     console.log('Clicked on cell at ', x, y, value)
 
     if (lostPosition) {
-      console.log('You are dead already!')
       return
     }
 
