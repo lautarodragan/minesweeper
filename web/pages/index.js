@@ -203,12 +203,10 @@ export default function Home() {
 
     if (losePosition) {
       setLostPosition(losePosition)
-      return
+    } else {
+      const newBoard = sweep(board, x, y)
+      setBoard(newBoard)
     }
-
-    const newBoard = sweep(board, x, y)
-
-    setBoard(newBoard)
   }
 
   const getClassNameForCell = (x, y, value) => {
