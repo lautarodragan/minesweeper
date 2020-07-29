@@ -12,7 +12,7 @@ import {
 } from './cell'
 import { getSurroundingFlagCount, getSurroundingMineCount, makeBoard, mapBoard } from './board'
 import { recursiveSolve } from './solve'
-import { sweep, getSweepLosePosition } from './sweep'
+import { sweep } from './sweep'
 
 const NoSsr = dynamic(() => Promise.resolve(({ children }) => <>{children}</>), {
   ssr: false
@@ -95,12 +95,11 @@ export default function Home() {
     if (surroundingMineCount !== surroundingFlagCount)
       return
 
-    const losePosition = getSweepLosePosition(board, x, y)
+    const { losePosition, board: newBoard } = sweep(board, x, y)
 
     if (losePosition) {
       setLostPosition(losePosition)
     } else {
-      const newBoard = sweep(board, x, y)
       setBoard(newBoard)
     }
   }
