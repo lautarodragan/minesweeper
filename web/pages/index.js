@@ -103,6 +103,21 @@ const recursiveSolve = (board, x, y) => {
   return newBoard
 }
 
+const sweep = (board, x, y) => {
+  const boardWidth = board[0].length
+  const boardHeight = board.length
+
+  let newBoard = cloneBoard(board)
+
+  for (let i = Math.max(0, x - 1); i < Math.min(x + 2, boardWidth); i++)
+    for (let j = Math.max(0, y - 1); j < Math.min(y + 2, boardHeight); j++) {
+      if (board[j][i] === CELL_UNKNOWN_CLEAR)
+        newBoard = recursiveSolve(newBoard, i, j)
+    }
+
+  return newBoard
+}
+
 export default function Home() {
   const [board, setBoard] = useState(makeBoard(boardWidth, boardHeight))
   const [lostPosition, setLostPosition] = useState(null)
@@ -196,13 +211,7 @@ export default function Home() {
       return
     }
 
-    let newBoard = cloneBoard(board)
-
-    for (let i = Math.max(0, x - 1); i < Math.min(x + 2, boardWidth); i++)
-      for (let j = Math.max(0, y - 1); j < Math.min(y + 2, boardHeight); j++) {
-        if (board[j][i] === CELL_UNKNOWN_CLEAR)
-          newBoard = recursiveSolve(newBoard, i, j)
-      }
+    const newBoard = sweep(board, x, y)
 
     setBoard(newBoard)
   }
