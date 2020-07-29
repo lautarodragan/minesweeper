@@ -180,8 +180,6 @@ export default function Home() {
 
     console.log('surroundingMineCount and surroundingFlagCount match!')
 
-    const newBoard = cloneBoard(board)
-
     const willLose = () => {
       for (let i = Math.max(0, x - 1); i < Math.min(x + 2, boardWidth); i++)
         for (let j = Math.max(0, y - 1); j < Math.min(y + 2, boardHeight); j++) {
@@ -197,6 +195,8 @@ export default function Home() {
       setLostPosition(lost)
       return
     }
+
+    const newBoard = cloneBoard(board)
 
     for (let i = Math.max(0, x - 1); i < Math.min(x + 2, boardWidth); i++)
       for (let j = Math.max(0, y - 1); j < Math.min(y + 2, boardHeight); j++) {
