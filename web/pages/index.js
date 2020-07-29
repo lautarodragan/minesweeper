@@ -10,7 +10,7 @@ import {
   CELL_UNKNOWN_MINE,
   CELL_UNKNOWN_MINE_FLAG
 } from './cell'
-import {getSurroundingFlagCount, getSurroundingMineCount, makeBoard, mapBoard} from './board'
+import { getSurroundingFlagCount, getSurroundingMineCount, makeBoard, mapBoard } from './board'
 import { recursiveSolve } from './solve'
 import { sweep, getSweepLosePosition } from './sweep'
 
