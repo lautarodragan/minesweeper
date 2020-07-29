@@ -9,10 +9,10 @@ import {
   CELL_UNKNOWN_CLEAR_FLAG,
   CELL_UNKNOWN_MINE,
   CELL_UNKNOWN_MINE_FLAG
-} from './cell'
-import { getSurroundingFlagCount, getSurroundingMineCount, makeBoard, mapBoard } from './board'
-import { recursiveSolve } from './solve'
-import { sweep } from './sweep'
+} from '../src/cell'
+import { getSurroundingFlagCount, getSurroundingMineCount, makeBoard, mapBoard } from '../src/board'
+import { recursiveSolve } from '../src/solve'
+import { sweep } from '../src/sweep'
 
 const NoSsr = dynamic(() => Promise.resolve(({ children }) => <>{children}</>), {
   ssr: false
