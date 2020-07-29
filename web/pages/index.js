@@ -118,14 +118,14 @@ const sweep = (board, x, y) => {
   return newBoard
 }
 
-const willLose = (board, x, y) => {
+const getSweepLosePosition = (board, x, y) => {
   const boardWidth = board[0].length
   const boardHeight = board.length
   for (let i = Math.max(0, x - 1); i < Math.min(x + 2, boardWidth); i++)
     for (let j = Math.max(0, y - 1); j < Math.min(y + 2, boardHeight); j++)
       if (board[j][i] === CELL_UNKNOWN_MINE)
         return { x: i, y: j }
-  return false
+  return null
 }
 
 export default function Home() {
@@ -199,10 +199,10 @@ export default function Home() {
     if (surroundingMineCount !== surroundingFlagCount)
       return
 
-    const lost = willLose(board, x, y)
+    const losePosition = getSweepLosePosition(board, x, y)
 
-    if (lost) {
-      setLostPosition(lost)
+    if (losePosition) {
+      setLostPosition(losePosition)
       return
     }
 
