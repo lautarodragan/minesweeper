@@ -60,6 +60,15 @@ const getSurroundingMineCount = (board, x, y) => {
   return sum
 }
 
+const getSurroundingFlagCount = (board, x, y) => {
+  let sum = 0
+  for (let j = Math.max(0, y - 1); j < Math.min(board.length, y + 2); j++)
+    for (let i = Math.max(0, x - 1); i < Math.min(board[0].length, x + 2); i++)
+      if ((x !== i || y !== j) && [CELL_UNKNOWN_MINE_FLAG, CELL_UNKNOWN_CLEAR_FLAG].includes(board[j][i]))
+        sum++;
+  return sum
+}
+
 const getCellText = (board, x, y) => {
   if (board[y][x] !== CELL_KNOWN_CLEAR)
     return ''
@@ -149,13 +158,64 @@ export default function Home() {
   const onMouseUp = (x, y, value) => (event) => {
     event.preventDefault()
     setMagicPosition(null)
-    console.log('getSurroundingMineCount', x, y, value, getSurroundingMineCount(board, x, y))
+
+    console.log('onMouseUp', event.buttons, event.button)
+
+    if (event.button !== 0 || board[y][x] !== CELL_KNOWN_CLEAR)
+      return
+
+    const surroundingMineCount = getSurroundingMineCount(board, x, y)
+
+    if (!surroundingMineCount)
+      return
+
+    const surroundingFlagCount = getSurroundingFlagCount(board, x, y)
+    console.log('onMouseUp getSurroundingMineCount surroundingFlagCount', x, y, value, surroundingMineCount, surroundingFlagCount)
+
+    if (surroundingMineCount !== surroundingFlagCount)
+      return
+
+    const boardWidth = board[0].length
+    const boardHeight = board.length
+
+    console.log('surroundingMineCount and surroundingFlagCount match!')
+
+    const newBoard = cloneBoard(board)
+
+    const willLose = () => {
+      for (let i = Math.max(0, x - 1); i < Math.min(x + 2, boardWidth); i++)
+        for (let j = Math.max(0, y - 1); j < Math.min(y + 2, boardHeight); j++) {
+          if (board[j][i] === CELL_UNKNOWN_MINE)
+            return { x: i, y: j }
+        }
+      return false
+    }
+
+    const lost = willLose()
+
+    if (lost) {
+      setLostPosition(lost)
+      return
+    }
+
+    for (let i = Math.max(0, x - 1); i < Math.min(x + 2, boardWidth); i++)
+      for (let j = Math.max(0, y - 1); j < Math.min(y + 2, boardHeight); j++) {
+        if (board[j][i] === CELL_UNKNOWN_CLEAR)
+          newBoard[j][i] = CELL_KNOWN_CLEAR
+      }
+
+    setBoard(newBoard)
   }
 
   const getClassNameForCell = (x, y, value) => {
     if (lostPosition && lostPosition.x === x && lostPosition.y === y)
       return 'lost'
-    if (magicPosition && magicPosition.x >= x - 1 && magicPosition.x <= x + 1 && magicPosition.y >= y - 1 && magicPosition.y <= y + 1)
+    if ((value === CELL_UNKNOWN_MINE || value === CELL_UNKNOWN_CLEAR)
+      && magicPosition
+      && magicPosition.x >= x - 1
+      && magicPosition.x <= x + 1
+      && magicPosition.y >= y - 1
+      && magicPosition.y <= y + 1)
       return 'clear'
     if (lostPosition && value === CELL_UNKNOWN_MINE )
       return 'mine'
