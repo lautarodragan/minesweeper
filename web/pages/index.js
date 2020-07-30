@@ -104,6 +104,11 @@ export default function Home() {
     }
   }
 
+  const onReset = () => {
+    setLostPosition(null)
+    setBoard(makeBoard(boardWidth, boardHeight))
+  }
+
   const getClassNameForCell = (x, y, value) => {
     if (lostPosition && lostPosition.x === x && lostPosition.y === y)
       return 'lost'
@@ -123,11 +128,6 @@ export default function Home() {
     if (value === CELL_UNKNOWN_CLEAR_FLAG || value === CELL_UNKNOWN_MINE_FLAG)
       return 'unknown flag'
     return 'unknown'
-  }
-
-  const onReset = () => {
-    setLostPosition(null)
-    setBoard(makeBoard(boardWidth, boardHeight))
   }
 
   const getSmileyClass = () => {
