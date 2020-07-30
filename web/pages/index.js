@@ -125,6 +125,11 @@ export default function Home() {
     return 'unknown'
   }
 
+  const onReset = () => {
+    setLostPosition(null)
+    setBoard(makeBoard(boardWidth, boardHeight))
+  }
+
   return (
     <div className="container">
       <Head>
@@ -133,6 +138,9 @@ export default function Home() {
       </Head>
 
       <NoSsr>
+        <section>
+          <div onClick={onReset} className="smile"></div>
+        </section>
         <section className="board">
           {
             board.map((columnCells, y) => (
@@ -162,6 +170,27 @@ export default function Home() {
       </NoSsr>
 
       <style jsx>{`
+        div.smile {
+          width: 64px;
+          height: 64px;
+          background-image: url(/smile-normal.png);
+          background-size: cover;
+          background-color: #c0c0c0;
+          border-top: 3px solid #fff;
+          border-left: 3px solid #fff;
+          border-bottom: 3px solid #808080;
+          border-right: 3px solid #808080;
+          padding: 6px;
+        }
+        
+        div.smile:active {
+          background-image: url(/smile-pressed.png);
+          border-top: 3px solid #808080;
+          border-left: 3px solid #808080;
+          border-bottom: 3px solid #fff;
+          border-right: 3px solid #fff;
+        }
+        
         section.board {
           display: grid;
           grid-template-columns: repeat(${boardWidth}, 1fr);
