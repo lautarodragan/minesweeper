@@ -75,8 +75,8 @@ export default function Home() {
       setBoard(recursiveSolve(board, x, y))
     } else if (value === CELL_UNKNOWN_MINE) {
       stopTimeTracker()
-      setCell(x, y, CELL_KNOWN_MINE)
       setLostPosition({ x, y })
+      setCell(x, y, CELL_KNOWN_MINE)
     }
   }
 
@@ -124,6 +124,7 @@ export default function Home() {
     const { losePosition, board: newBoard } = sweep(board, x, y)
 
     if (losePosition) {
+      stopTimeTracker()
       setLostPosition(losePosition)
     } else {
       setBoard(newBoard)
