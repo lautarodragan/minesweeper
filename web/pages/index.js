@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
 import React, { useState } from 'react'
@@ -34,6 +35,7 @@ export default function Home() {
   const [lostPosition, setLostPosition] = useState(null)
   const [sweeperPosition, setSweeperPosition] = useState(null)
   const [cheatSeeMines, setCheatSeeMines] = useState(false)
+  const [startTime, setStartTime] = useState(null)
 
   const setCell = (x, y, value) => setBoard(mapBoard(board, (x2, y2, value2) => (
     x === x2 && y === y2
@@ -47,6 +49,8 @@ export default function Home() {
     }
 
     if (value === CELL_UNKNOWN_CLEAR) {
+       if (startTime === null)
+         setStartTime(DateTime.utc())
       setBoard(recursiveSolve(board, x, y))
     } else if (value === CELL_UNKNOWN_MINE) {
       setCell(x, y, CELL_KNOWN_MINE)
@@ -106,6 +110,7 @@ export default function Home() {
 
   const onReset = () => {
     setLostPosition(null)
+    setStartTime(null)
     setBoard(makeBoard(boardWidth, boardHeight))
   }
 
@@ -148,6 +153,7 @@ export default function Home() {
       <NoSsr>
         <section>
           <div onClick={onReset} className={'smile ' + getSmileyClass()}></div>
+          <div className="time">{startTime && startTime.diffNow().negate().toFormat('mm:ss')}</div>
         </section>
         <section className="board">
           {
