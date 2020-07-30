@@ -4,11 +4,7 @@ import dynamic from 'next/dynamic'
 import React, { useState, useEffect, useRef } from 'react'
 
 import {
-  CELL_KNOWN_CLEAR,
-  CELL_UNKNOWN_CLEAR,
-  CELL_UNKNOWN_CLEAR_FLAG,
-  CELL_UNKNOWN_MINE,
-  CELL_UNKNOWN_MINE_FLAG,
+  CellValue,
   getFlagCount,
   getSurroundingFlagCount,
   getSurroundingMineCount,
@@ -24,7 +20,7 @@ const NoSsr = dynamic(() => Promise.resolve(({ children }) => <>{children}</>), 
 })
 
 const getCellText = (board, x, y) => {
-  if (board[y][x] !== CELL_KNOWN_CLEAR)
+  if (board[y][x] !== CellValue.KnownClear)
     return ''
   const surroundingMineCount = getSurroundingMineCount(board, x, y)
   if (surroundingMineCount < 1)
@@ -85,11 +81,11 @@ export default function Home() {
     if (won || lostPosition)
       return
 
-    if (value === CELL_UNKNOWN_CLEAR) {
+    if (value === CellValue.UnknownClear) {
       if (startTime === null)
         startTimeTracker()
       setBoard(recursiveSolve(board, x, y))
-    } else if (value === CELL_UNKNOWN_MINE) {
+    } else if (value === CellValue.UnknownMine) {
       lose({ x, y })
     }
   }
@@ -100,14 +96,14 @@ export default function Home() {
     if (won || lostPosition)
       return
 
-    if (board[y][x] === CELL_UNKNOWN_CLEAR)
-      setCell(x, y, CELL_UNKNOWN_CLEAR_FLAG)
-    else if (board[y][x] === CELL_UNKNOWN_MINE)
-      setCell(x, y, CELL_UNKNOWN_MINE_FLAG)
-    else if (board[y][x] === CELL_UNKNOWN_CLEAR_FLAG)
-      setCell(x, y, CELL_UNKNOWN_CLEAR)
-    else if (board[y][x] === CELL_UNKNOWN_MINE_FLAG)
-      setCell(x, y, CELL_UNKNOWN_MINE)
+    if (board[y][x] === CellValue.UnknownClear)
+      setCell(x, y, CellValue.UnknownClearFlag)
+    else if (board[y][x] === CellValue.UnknownMine)
+      setCell(x, y, CellValue.UnknownMineFlag)
+    else if (board[y][x] === CellValue.UnknownClearFlag)
+      setCell(x, y, CellValue.UnknownClear)
+    else if (board[y][x] === CellValue.UnknownMineFlag)
+      setCell(x, y, CellValue.UnknownMine)
   }
 
   const onMouseDown = (x, y, value) => (event) => {
@@ -138,7 +134,7 @@ export default function Home() {
 
     setSweeperPosition(null)
 
-    if (event.button !== 0 || board[y][x] !== CELL_KNOWN_CLEAR)
+    if (event.button !== 0 || board[y][x] !== CellValue.KnownClear)
       return
 
     const surroundingMineCount = getSurroundingMineCount(board, x, y)
@@ -172,20 +168,20 @@ export default function Home() {
   const getClassNameForCell = (x, y, value) => {
     if (lostPosition && lostPosition.x === x && lostPosition.y === y)
       return 'lost'
-    if ((value === CELL_UNKNOWN_MINE || value === CELL_UNKNOWN_CLEAR)
+    if ((value === CellValue.UnknownMine || value === CellValue.UnknownClear)
       && sweeperPosition
       && sweeperPosition.x >= x - 1
       && sweeperPosition.x <= x + 1
       && sweeperPosition.y >= y - 1
       && sweeperPosition.y <= y + 1)
       return 'clear'
-    if (lostPosition && value === CELL_UNKNOWN_MINE )
+    if (lostPosition && value === CellValue.UnknownMine )
       return 'mine'
-    if (!lostPosition && value === CELL_UNKNOWN_MINE)
+    if (!lostPosition && value === CellValue.UnknownMine)
       return cheatSeeMines ? 'unknown mine' : 'unknown'
-    if (value === CELL_KNOWN_CLEAR)
+    if (value === CellValue.KnownClear)
       return 'clear'
-    if (value === CELL_UNKNOWN_CLEAR_FLAG || value === CELL_UNKNOWN_MINE_FLAG)
+    if (value === CellValue.UnknownClearFlag || value === CellValue.UnknownMineFlag)
       return 'unknown flag'
     return 'unknown'
   }
