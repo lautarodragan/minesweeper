@@ -11,7 +11,16 @@ import {
   CELL_UNKNOWN_MINE,
   CELL_UNKNOWN_MINE_FLAG
 } from '@taros-minesweeper/lib'
-import { getFlagCount, getSurroundingFlagCount, getSurroundingMineCount, isWon, makeBoard, mapBoard, recursiveSolve, sweep } from '@taros-minesweeper/lib'
+import {
+  getFlagCount,
+  getSurroundingFlagCount,
+  getSurroundingMineCount,
+  isWon,
+  makeBoard,
+  mapBoard,
+  recursiveSolve,
+  sweep,
+} from '@taros-minesweeper/lib'
 
 const NoSsr = dynamic(() => Promise.resolve(({ children }) => <>{children}</>), {
   ssr: false
