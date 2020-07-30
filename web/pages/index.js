@@ -131,10 +131,11 @@ export default function Home() {
   }
 
   const getSmileyClass = () => {
-    if (!lostPosition)
-      return ''
     if (lostPosition)
       return 'lost'
+    if (sweeperPosition)
+      return 'wondering'
+    return ''
   }
 
   return (
@@ -200,6 +201,10 @@ export default function Home() {
         
         div.smile.lost {
           background-image: url(/smile-lost.png);
+        }
+        
+        div.smile.wondering {
+          background-image: url(/smile-wondering.png);
         }
         
         section.board {
