@@ -130,6 +130,13 @@ export default function Home() {
     setBoard(makeBoard(boardWidth, boardHeight))
   }
 
+  const getSmileyClass = () => {
+    if (!lostPosition)
+      return ''
+    if (lostPosition)
+      return 'lost'
+  }
+
   return (
     <div className="container">
       <Head>
@@ -139,7 +146,7 @@ export default function Home() {
 
       <NoSsr>
         <section>
-          <div onClick={onReset} className="smile"></div>
+          <div onClick={onReset} className={'smile ' + getSmileyClass()}></div>
         </section>
         <section className="board">
           {
@@ -189,6 +196,10 @@ export default function Home() {
           border-left: 3px solid #808080;
           border-bottom: 3px solid #fff;
           border-right: 3px solid #fff;
+        }
+        
+        div.smile.lost {
+          background-image: url(/smile-lost.png);
         }
         
         section.board {
