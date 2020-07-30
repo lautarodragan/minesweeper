@@ -9,9 +9,7 @@ import {
   CELL_UNKNOWN_CLEAR,
   CELL_UNKNOWN_CLEAR_FLAG,
   CELL_UNKNOWN_MINE,
-  CELL_UNKNOWN_MINE_FLAG
-} from '@taros-minesweeper/lib'
-import {
+  CELL_UNKNOWN_MINE_FLAG,
   getFlagCount,
   getSurroundingFlagCount,
   getSurroundingMineCount,
