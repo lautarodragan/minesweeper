@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
-import React, { useRef, useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import {
   CELL_KNOWN_CLEAR,
@@ -11,7 +11,7 @@ import {
   CELL_UNKNOWN_MINE,
   CELL_UNKNOWN_MINE_FLAG
 } from '../src/cell'
-import { getSurroundingFlagCount, getSurroundingMineCount, makeBoard, mapBoard } from '../src/board'
+import {getFlagCount, getSurroundingFlagCount, getSurroundingMineCount, makeBoard, mapBoard} from '../src/board'
 import { recursiveSolve } from '../src/solve'
 import { sweep } from '../src/sweep'
 
@@ -38,7 +38,12 @@ export default function Home() {
   const [cheatSeeMines, setCheatSeeMines] = useState(false)
   const [startTime, setStartTime] = useState(null)
   const [gameDuration, setGameDuration] = useState(null)
+  const [flagCount, setFlagCount] = useState(0)
   const gameDurationTimer = useRef(null)
+
+  useEffect(() => {
+    setFlagCount(getFlagCount(board))
+  }, [board])
 
   const setCell = (x, y, value) => setBoard(mapBoard(board, (x2, y2, value2) => (
     x === x2 && y === y2
@@ -170,6 +175,7 @@ export default function Home() {
 
       <NoSsr>
         <section>
+          <div>{boardMineCount - flagCount}</div>
           <div onClick={onReset} className={'smile ' + getSmileyClass()}></div>
           <div className="time">{gameDuration}</div>
         </section>

@@ -57,3 +57,12 @@ export const getSurroundingFlagCount = (board, x, y) => {
         sum++;
   return sum
 }
+
+export const getFlagCount = (board) => {
+  let sum = 0
+  for (let y = 0; y < board.length; y++)
+    for (let x = 0; x < board[0].length; x++)
+      if ([CELL_UNKNOWN_MINE_FLAG, CELL_UNKNOWN_CLEAR_FLAG].includes(board[y][x]))
+        sum++;
+  return sum
+}
