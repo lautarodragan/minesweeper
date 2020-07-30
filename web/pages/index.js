@@ -78,9 +78,8 @@ export default function Home() {
   }
 
   const onClick = (x, y, value) => {
-    if (lostPosition) {
+    if (won || lostPosition)
       return
-    }
 
     if (value === CELL_UNKNOWN_CLEAR) {
       if (startTime === null)
@@ -93,6 +92,10 @@ export default function Home() {
 
   const onContextMenu = (x, y) => (event) => {
     event.preventDefault()
+
+    if (won || lostPosition)
+      return
+
     if (board[y][x] === CELL_UNKNOWN_CLEAR)
       setCell(x, y, CELL_UNKNOWN_CLEAR_FLAG)
     else if (board[y][x] === CELL_UNKNOWN_MINE)
@@ -105,18 +108,30 @@ export default function Home() {
 
   const onMouseDown = (x, y, value) => (event) => {
     event.preventDefault()
+
+    if (won || lostPosition)
+      return
+
     if (event.buttons === 3)
       setSweeperPosition({ x, y })
   }
 
   const onMouseMove = (x, y, value) => (event) => {
     event.preventDefault()
+
+    if (won || lostPosition)
+      return
+
     if (event.buttons === 3)
       setSweeperPosition({ x, y })
   }
 
   const onMouseUp = (x, y, value) => (event) => {
     event.preventDefault()
+
+    if (won || lostPosition)
+      return
+
     setSweeperPosition(null)
 
     if (event.button !== 0 || board[y][x] !== CELL_KNOWN_CLEAR)
