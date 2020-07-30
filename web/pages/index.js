@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon'
 import Head from 'next/head'
 import dynamic from 'next/dynamic'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 import {
   CELL_KNOWN_CLEAR,
@@ -36,6 +36,8 @@ export default function Home() {
   const [sweeperPosition, setSweeperPosition] = useState(null)
   const [cheatSeeMines, setCheatSeeMines] = useState(false)
   const [startTime, setStartTime] = useState(null)
+  const [gameDuration, setGameDuration] = useState(null)
+  const gameDurationTimer = useRef(null)
 
   const setCell = (x, y, value) => setBoard(mapBoard(board, (x2, y2, value2) => (
     x === x2 && y === y2
@@ -43,16 +45,31 @@ export default function Home() {
       : value2
   )))
 
+  const startTimeTracker = () => {
+    const startTime = DateTime.utc()
+    setStartTime(startTime)
+    gameDurationTimer.current = setInterval(() => {
+      setGameDuration(startTime.diffNow().negate().toFormat('mm:ss'))
+    }, 1000)
+  }
+
+  const stopTimeTracker = () => {
+    clearInterval(gameDurationTimer.current)
+    gameDurationTimer.current = null
+    setStartTime(null)
+  }
+
   const onClick = (x, y, value) => {
     if (lostPosition) {
       return
     }
 
     if (value === CELL_UNKNOWN_CLEAR) {
-       if (startTime === null)
-         setStartTime(DateTime.utc())
+      if (startTime === null)
+        startTimeTracker()
       setBoard(recursiveSolve(board, x, y))
     } else if (value === CELL_UNKNOWN_MINE) {
+      stopTimeTracker()
       setCell(x, y, CELL_KNOWN_MINE)
       setLostPosition({ x, y })
     }
@@ -153,7 +170,7 @@ export default function Home() {
       <NoSsr>
         <section>
           <div onClick={onReset} className={'smile ' + getSmileyClass()}></div>
-          <div className="time">{startTime && startTime.diffNow().negate().toFormat('mm:ss')}</div>
+          <div className="time">{gameDuration}</div>
         </section>
         <section className="board">
           {
