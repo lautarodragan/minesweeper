@@ -31,7 +31,8 @@ const getCellText = (board, x, y) => {
 export default function Home() {
   const [boardWidth, setBoardWidth] = useState(16)
   const [boardHeight, setBoardHeight] = useState(16)
-  const [board, setBoard] = useState(makeBoard(boardWidth, boardHeight))
+  const [boardMineCount, setBoardMineCount] = useState(40)
+  const [board, setBoard] = useState(makeBoard(boardWidth, boardHeight, boardMineCount))
   const [lostPosition, setLostPosition] = useState(null)
   const [sweeperPosition, setSweeperPosition] = useState(null)
   const [cheatSeeMines, setCheatSeeMines] = useState(false)
