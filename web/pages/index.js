@@ -11,7 +11,7 @@ import {
   CELL_UNKNOWN_MINE,
   CELL_UNKNOWN_MINE_FLAG
 } from '../src/cell'
-import {getFlagCount, getSurroundingFlagCount, getSurroundingMineCount, makeBoard, mapBoard} from '../src/board'
+import { getFlagCount, getSurroundingFlagCount, getSurroundingMineCount, isWon, makeBoard, mapBoard } from '../src/board'
 import { recursiveSolve } from '../src/solve'
 import { sweep } from '../src/sweep'
 
@@ -39,10 +39,13 @@ export default function Home() {
   const [startTime, setStartTime] = useState(null)
   const [gameDuration, setGameDuration] = useState(null)
   const [flagCount, setFlagCount] = useState(0)
+  const [won, setWon] = useState(false)
   const gameDurationTimer = useRef(null)
 
   useEffect(() => {
     setFlagCount(getFlagCount(board))
+    if (isWon(board))
+      win()
   }, [board])
 
   const setCell = (x, y, value) => setBoard(mapBoard(board, (x2, y2, value2) => (
@@ -67,6 +70,11 @@ export default function Home() {
   const lose = (losePosition) => {
     stopTimeTracker()
     setLostPosition(losePosition)
+  }
+
+  const win = () => {
+    stopTimeTracker()
+    setWon(true)
   }
 
   const onClick = (x, y, value) => {
@@ -136,6 +144,7 @@ export default function Home() {
   const onReset = () => {
     stopTimeTracker()
     setLostPosition(null)
+    setWon(false)
     setStartTime(null)
     setGameDuration(null)
     setBoard(makeBoard(boardWidth, boardHeight))
@@ -167,6 +176,8 @@ export default function Home() {
       return 'lost'
     if (sweeperPosition)
       return 'wondering'
+    if (won)
+      return 'won'
     return ''
   }
 
@@ -285,6 +296,10 @@ export default function Home() {
         
         div.smile.wondering {
           background-image: url(/smile-wondering.png);
+        }
+        
+        div.smile.won {
+          background-image: url(/smile-won.png);
         }
         
         section.board {

@@ -66,3 +66,11 @@ export const getFlagCount = (board) => {
         sum++;
   return sum
 }
+
+export const isWon = (board) => {
+  for (let y = 0; y < board.length; y++)
+    for (let x = 0; x < board[0].length; x++)
+      if ([CELL_UNKNOWN_MINE, CELL_UNKNOWN_CLEAR].includes(board[y][x]))
+        return false;
+  return true
+}
