@@ -177,9 +177,9 @@ export default function Home() {
       <section className="game">
         <NoSsr>
           <section className="top-bar">
-            <div>{boardMineCount - flagCount}</div>
+            <div><span className="dseg">{boardMineCount - flagCount}</span></div>
             <div onClick={onReset} className={'smile ' + getSmileyClass()}></div>
-            <div className="time">{gameDuration || '00:00'}</div>
+            <div><span className="dseg">{gameDuration || '00:00'}</span></div>
           </section>
           <section className="board">
             {
@@ -228,6 +228,8 @@ export default function Home() {
         .top-bar {
           display: grid;
           grid-template-columns: 1fr auto 1fr;
+          background-color: #c0c0c0;
+          padding: 4px;
         }
         
         .top-bar >div {
@@ -238,6 +240,19 @@ export default function Home() {
         .top-bar >div:last-child {
           display: flex;
           justify-content: flex-end;
+        }
+        
+        .top-bar .dseg {
+          font-family: "DSEG7 Classic";
+          color: red;
+          background: black;
+          font-size: 2rem;
+          padding: 1px;
+          margin: 0 4px;
+          border-top: 3px solid #808080;
+          border-left: 3px solid #808080;
+          border-bottom: 3px solid #fff;
+          border-right: 3px solid #fff;
         }
       
         div.smile {
@@ -328,6 +343,14 @@ export default function Home() {
       `}</style>
 
       <style jsx global>{`
+        @font-face {
+          font-family: "DSEG7 Classic";
+          font-weight: bold;
+          src: url("/fonts/DSEG7Classic-Bold.ttf") format("ttf"),
+               url("/fonts/DSEG7Classic-Bold.woff") format("woff");
+               url("/fonts/DSEG7Classic-Bold.woff2") format("woff2");
+        }
+      
         html,
         body {
           padding: 0;
