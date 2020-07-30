@@ -5,7 +5,6 @@ import React, { useState, useEffect, useRef } from 'react'
 
 import {
   CELL_KNOWN_CLEAR,
-  CELL_KNOWN_MINE,
   CELL_UNKNOWN_CLEAR,
   CELL_UNKNOWN_CLEAR_FLAG,
   CELL_UNKNOWN_MINE,
