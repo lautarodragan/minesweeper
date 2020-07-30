@@ -62,7 +62,6 @@ export default function Home() {
   const stopTimeTracker = () => {
     clearInterval(gameDurationTimer.current)
     gameDurationTimer.current = null
-    setStartTime(null)
   }
 
   const onClick = (x, y, value) => {
@@ -132,8 +131,10 @@ export default function Home() {
   }
 
   const onReset = () => {
+    stopTimeTracker()
     setLostPosition(null)
     setStartTime(null)
+    setGameDuration(null)
     setBoard(makeBoard(boardWidth, boardHeight))
   }
 
@@ -178,7 +179,7 @@ export default function Home() {
           <section className="top-bar">
             <div>{boardMineCount - flagCount}</div>
             <div onClick={onReset} className={'smile ' + getSmileyClass()}></div>
-            <div className="time">{gameDuration}</div>
+            <div className="time">{gameDuration || '00:00'}</div>
           </section>
           <section className="board">
             {
