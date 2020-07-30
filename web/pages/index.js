@@ -76,7 +76,6 @@ export default function Home() {
     } else if (value === CELL_UNKNOWN_MINE) {
       stopTimeTracker()
       setLostPosition({ x, y })
-      setCell(x, y, CELL_KNOWN_MINE)
     }
   }
 
