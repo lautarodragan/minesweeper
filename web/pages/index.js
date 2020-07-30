@@ -210,6 +210,20 @@ export default function Home() {
       </section>
 
       <style jsx>{`
+        .game {
+          min-height: 100vh;
+          padding: 0 0.5rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: stretch;
+        }
+
+        .container {
+          display: flex;
+          justify-content: center;
+        }
+        
         .top-bar {
           display: grid;
           grid-template-columns: 1fr auto 1fr;
@@ -309,20 +323,6 @@ export default function Home() {
           flex-direction: row;
           justify-content: center;
           align-items: center;
-        }
-
-        .game {
-          min-height: 100vh;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: stretch;
-        }
-
-        .container {
-          display: flex;
-          justify-content: center;
         }
       `}</style>
 
