@@ -173,41 +173,58 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <NoSsr>
-        <section>
-          <div>{boardMineCount - flagCount}</div>
-          <div onClick={onReset} className={'smile ' + getSmileyClass()}></div>
-          <div className="time">{gameDuration}</div>
-        </section>
-        <section className="board">
-          {
-            board.map((columnCells, y) => (
-              columnCells.map((cell, x) => (
-                <div
-                  key={`${x}, ${y}`}
-                  title={`(${x}, ${y}) ${cell}`}
-                  onClick={() => onClick(x, y, cell)}
-                  onContextMenuCapture={onContextMenu(x, y)}
-                  onMouseDown={onMouseDown(x, y, cell)}
-                  onMouseMove={onMouseMove(x, y, cell)}
-                  onMouseUp={onMouseUp(x, y, cell)}
-                  className={getClassNameForCell(x, y, cell)}
-                >
-                  {getCellText(board, x, y)}
-                </div>
+      <section className="game">
+        <NoSsr>
+          <section className="top-bar">
+            <div>{boardMineCount - flagCount}</div>
+            <div onClick={onReset} className={'smile ' + getSmileyClass()}></div>
+            <div className="time">{gameDuration}</div>
+          </section>
+          <section className="board">
+            {
+              board.map((columnCells, y) => (
+                columnCells.map((cell, x) => (
+                  <div
+                    key={`${x}, ${y}`}
+                    title={`(${x}, ${y}) ${cell}`}
+                    onClick={() => onClick(x, y, cell)}
+                    onContextMenuCapture={onContextMenu(x, y)}
+                    onMouseDown={onMouseDown(x, y, cell)}
+                    onMouseMove={onMouseMove(x, y, cell)}
+                    onMouseUp={onMouseUp(x, y, cell)}
+                    className={getClassNameForCell(x, y, cell)}
+                  >
+                    {getCellText(board, x, y)}
+                  </div>
+                ))
               ))
-            ))
-          }
-        </section>
-        <section>
-          <div className="checkbox">
-            <input id="cheat-see-mines" type="checkbox" value={cheatSeeMines} onChange={() => setCheatSeeMines(!cheatSeeMines)} />
-            <label htmlFor="cheat-see-mines">Cheat: See Mines</label>
-          </div>
-        </section>
-      </NoSsr>
+            }
+          </section>
+          <section>
+            <div className="checkbox">
+              <input id="cheat-see-mines" type="checkbox" value={cheatSeeMines} onChange={() => setCheatSeeMines(!cheatSeeMines)} />
+              <label htmlFor="cheat-see-mines">Cheat: See Mines</label>
+            </div>
+          </section>
+        </NoSsr>
+      </section>
 
       <style jsx>{`
+        .top-bar {
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
+        }
+        
+        .top-bar >div {
+          display: flex;
+          align-items: center;
+        }
+        
+        .top-bar >div:last-child {
+          display: flex;
+          justify-content: flex-end;
+        }
+      
         div.smile {
           width: 64px;
           height: 64px;
@@ -294,13 +311,18 @@ export default function Home() {
           align-items: center;
         }
 
-        .container {
+        .game {
           min-height: 100vh;
           padding: 0 0.5rem;
           display: flex;
           flex-direction: column;
           justify-content: center;
-          align-items: center;
+          align-items: stretch;
+        }
+
+        .container {
+          display: flex;
+          justify-content: center;
         }
 
         main {
