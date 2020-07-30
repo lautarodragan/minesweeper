@@ -64,6 +64,11 @@ export default function Home() {
     gameDurationTimer.current = null
   }
 
+  const lose = (losePosition) => {
+    stopTimeTracker()
+    setLostPosition(losePosition)
+  }
+
   const onClick = (x, y, value) => {
     if (lostPosition) {
       return
@@ -74,8 +79,7 @@ export default function Home() {
         startTimeTracker()
       setBoard(recursiveSolve(board, x, y))
     } else if (value === CELL_UNKNOWN_MINE) {
-      stopTimeTracker()
-      setLostPosition({ x, y })
+      lose({ x, y })
     }
   }
 
@@ -123,8 +127,7 @@ export default function Home() {
     const { losePosition, board: newBoard } = sweep(board, x, y)
 
     if (losePosition) {
-      stopTimeTracker()
-      setLostPosition(losePosition)
+      lose(losePosition)
     } else {
       setBoard(newBoard)
     }
