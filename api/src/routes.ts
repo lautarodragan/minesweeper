@@ -1,8 +1,12 @@
 import KoaRouter from '@koa/router'
 
-const games: any[] = []
+import { Business } from './business'
 
-export const Router = () => {
+interface Config {
+  readonly business: Business
+}
+
+export const Router = ({ business }: Config) => {
   const router = new KoaRouter()
 
   router.get('/', (ctx, next) => {
@@ -13,13 +17,14 @@ export const Router = () => {
   })
 
   router.get('/games', (ctx, next) => {
+    const games = business.getGames()
     ctx.status = 200
     ctx.body = games
   })
 
   router.get('/games/:id', (ctx, next) => {
     const { id } = ctx.params
-    const game = games.find(game => game.id === id)
+    const game = business.getGameById(id)
 
     if (game) {
       ctx.status = 200
@@ -32,13 +37,14 @@ export const Router = () => {
   router.post('/games', (ctx, next) => {
     const game = ctx.request.body
 
-    if (games.some(_ => _.id === game.id)) {
+    try {
+      business.createGame(game)
+      ctx.status = 201
+    } catch (error) {
+      // Assume error is always Used ID. We'll decouple this later.
       ctx.body = 'Id in use.'
       ctx.status = 422
     }
-
-    games.push(game)
-    ctx.status = 201
   })
 
   return router
