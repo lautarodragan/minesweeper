@@ -5,6 +5,8 @@ import React, { useState, useEffect, useRef } from 'react'
 
 import {
   CellValue,
+  isUnknown,
+  toggleFlag,
   getFlagCount,
   getSurroundingFlagCount,
   getSurroundingMineCount,
@@ -95,21 +97,6 @@ export default function Home() {
 
     if (won || lostPosition)
       return
-
-    const toggleFlag = (currentCellValue) => {
-      if (currentCellValue === CellValue.UnknownClear)
-        return CellValue.UnknownClearFlag
-      else if (currentCellValue === CellValue.UnknownMine)
-        return CellValue.UnknownMineFlag
-      else if (currentCellValue === CellValue.UnknownClearFlag)
-        return CellValue.UnknownClear
-      else if (currentCellValue === CellValue.UnknownMineFlag)
-        return CellValue.UnknownMine
-      throw new Error("This cell can't be flagged.")
-    }
-
-    const isUnknown = (value) =>
-      [CellValue.UnknownClear, CellValue.UnknownMine, CellValue.UnknownClearFlag, CellValue.UnknownMineFlag].includes(value)
 
     if (!isUnknown(board[y][x]))
       return
