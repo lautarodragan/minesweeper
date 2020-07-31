@@ -7,14 +7,14 @@ interface Config {
 }
 
 export interface Business {
-  readonly getGames: () => readonly Game[]
+  readonly getGames: () => readonly Omit<Game, 'board'>[]
   readonly getGameById: (id: string) => Game | undefined
   readonly createGame: (game: Game) => void
 }
 
 export const Business = ({ games }: Config): Business => {
 
-  const getGames = () => games
+  const getGames = () => games.map(({ board, ...game }) => ({ ...game }))
 
   const getGameById = (id: string) => {
     const game = games.find(game => game.id === id)
