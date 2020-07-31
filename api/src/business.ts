@@ -1,11 +1,11 @@
 interface Config {
-  readonly games: any[]
+  readonly games: Game[]
 }
 
 export interface Business {
-  readonly getGames: () => readonly any[]
-  readonly getGameById: (id: string) => any
-  readonly createGame: (game: any) => any
+  readonly getGames: () => readonly Game[]
+  readonly getGameById: (id: string) => Game | undefined
+  readonly createGame: (game: Game) => void
 }
 
 export const Business = ({ games }: Config): Business => {
@@ -17,7 +17,7 @@ export const Business = ({ games }: Config): Business => {
     return game
   }
 
-  const createGame = (game: any) => {
+  const createGame = (game: Game) => {
     if (games.some(_ => _.id === game.id))
       throw new Error()
     games.push(game)
