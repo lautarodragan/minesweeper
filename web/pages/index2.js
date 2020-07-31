@@ -70,13 +70,9 @@ export default function Home() {
   useEffect(() => {
     console.log('game changed', game)
     setBoard(game.board)
-  }, [game])
-
-  useEffect(() => {
-    setFlagCount(getFlagCount(board))
-    if (isWon(board))
+    if (game.won)
       win()
-  }, [board])
+  }, [game])
 
   const setCell = (x, y, value) => setBoard(mapBoard(board, (x2, y2, value2) => (
     x === x2 && y === y2
