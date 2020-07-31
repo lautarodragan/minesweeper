@@ -7,3 +7,5 @@ const router = Router({ business })
 const server = Server({ router })
 
 server.start()
+
+console.log(`Taro's Minesweeper API up and running!`)
