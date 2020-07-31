@@ -12,7 +12,7 @@ module.exports = (phase) => {
 
   const env = {
     API_URL: isProd
-      ? 'https://www.siliconvalley-codecamp.com/rest/speakers/ps'
+      ? 'https://taros-minesweeper.herokuapp.com'
       : 'http://localhost:8000',
   }
 
