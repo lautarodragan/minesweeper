@@ -47,5 +47,21 @@ export const Router = ({ business }: Config) => {
     }
   })
 
+  router.put('/games/:gameId/cells/:cellId', (ctx, next) => {
+    const { gameId, cellId } = ctx.params
+    const { value } = ctx.request.body
+
+    const [x, y] = cellId.split(',')
+
+    try {
+      business.setGameCell(gameId, x, y, value)
+      ctx.status = 200
+    } catch (error) {
+      // Assume error is always 404 Game Not Found. We'll decouple this later.
+      ctx.body = `No game with id "${gameId}"`
+      ctx.status = 404
+    }
+  })
+
   return router
 }
