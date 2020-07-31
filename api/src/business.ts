@@ -1,5 +1,7 @@
 import { makeBoard } from '@taros-minesweeper/lib'
 
+import { Game } from './game'
+
 interface Config {
   readonly games: Game[]
 }
