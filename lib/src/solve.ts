@@ -31,4 +31,4 @@ export const reveal = (board: Board, x: number, y: number): Board => {
 }
 
 const isInBounds = (x: number, y: number, width: number, height: number): boolean =>
-  x >= 0 && x < width && y > 0 && y < height
+  x >= 0 && x < width && y >= 0 && y < height
