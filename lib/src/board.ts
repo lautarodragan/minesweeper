@@ -17,12 +17,14 @@ export const mapBoard = (board: Board, callback: (x: number, y: number, value: C
 export const cloneBoard = (board: Board): Board => mapBoard(board, (x, y, value) => value)
 
 export const makeMines = (width: number, height: number, mineCount: number): readonly Coord[] => {
-  const mines = []
+  const mines: Coord[] = []
+
+  const mineTaken = (mine: Coord) => mines.some(_ => _.x === mine.x && _.y === mine.y)
 
   while (mines.length < mineCount) {
-    let newMine
+    let newMine: Coord | null = null
 
-    while (!newMine || mines.find(mine => mine.x === newMine.x && mine.y === newMine.y)) {
+    while (newMine === null || mineTaken(newMine)) {
       newMine = {
         x: Math.floor(Math.random() * width),
         y: Math.floor(Math.random() * height),
@@ -44,7 +46,7 @@ export const makeBoard = (width: number, height: number, mineCount = 40): Board 
   )
 }
 
-export const getSurroundingMineCount = (board, x: number, y: number): number => {
+export const getSurroundingMineCount = (board: Board, x: number, y: number): number => {
   let sum = 0
   for (let j = Math.max(0, y - 1); j < Math.min(board.length, y + 2); j++)
     for (let i = Math.max(0, x - 1); i < Math.min(board[0].length, x + 2); i++)
@@ -53,7 +55,7 @@ export const getSurroundingMineCount = (board, x: number, y: number): number => 
   return sum
 }
 
-export const getSurroundingFlagCount = (board, x: number, y: number): number => {
+export const getSurroundingFlagCount = (board: Board, x: number, y: number): number => {
   let sum = 0
   for (let j = Math.max(0, y - 1); j < Math.min(board.length, y + 2); j++)
     for (let i = Math.max(0, x - 1); i < Math.min(board[0].length, x + 2); i++)

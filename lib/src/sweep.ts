@@ -28,7 +28,7 @@ const sweepSafely = (board: Board, x: number, y: number): Board => {
   return newBoard
 }
 
-const getSweepLosePosition = (board: Board, x: number, y: number): Coord => {
+const getSweepLosePosition = (board: Board, x: number, y: number): Coord | null => {
   const boardWidth = board[0].length
   const boardHeight = board.length
   for (let i = Math.max(0, x - 1); i < Math.min(x + 2, boardWidth); i++)

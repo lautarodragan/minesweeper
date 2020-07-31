@@ -7,7 +7,7 @@ export const reveal = (board: Board, x: number, y: number): Board => {
   const width = board[0].length
   const height = board.length
 
-  const recursive = (x, y) => {
+  const recursive = (x: number, y: number) => {
     if (!isInBounds(x, y, width, height))
       return
 
