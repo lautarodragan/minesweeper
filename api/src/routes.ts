@@ -29,9 +29,13 @@ export const Router = () => {
     }
   })
 
-  router.put('/games/:id', (ctx, next) => {
-    const { id } = ctx.params
+  router.post('/games', (ctx, next) => {
     const game = ctx.request.body
+
+    if (games.some(_ => _.id === game.id)) {
+      ctx.body = 'Id in use.'
+      ctx.status = 422
+    }
 
     games.push(game)
     ctx.status = 201
