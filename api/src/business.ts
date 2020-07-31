@@ -1,3 +1,5 @@
+import { makeBoard } from '@taros-minesweeper/lib'
+
 interface Config {
   readonly games: Game[]
 }
@@ -18,9 +20,21 @@ export const Business = ({ games }: Config): Business => {
   }
 
   const createGame = (game: Game) => {
+    const { id, width = 10, height = 10, mineCount = 10 } = game
+
     if (games.some(_ => _.id === game.id))
       throw new Error()
-    games.push(game)
+
+    const board = makeBoard(width, height, mineCount)
+
+    const newGame = {
+      id,
+      width,
+      height,
+      mineCount,
+      board,
+    }
+    games.push(newGame)
   }
 
   return {
