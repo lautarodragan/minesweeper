@@ -1,6 +1,7 @@
-import { makeBoard } from '@taros-minesweeper/lib'
+import { makeBoard, CellValue } from '@taros-minesweeper/lib'
 
 import { Game } from './game'
+import { recursiveSolve, isWon } from '@taros-minesweeper/lib/dist'
 
 interface Config {
   readonly games: Game[]
@@ -10,6 +11,7 @@ export interface Business {
   readonly getGames: () => readonly Omit<Game, 'board'>[]
   readonly getGameById: (id: string) => Game | undefined
   readonly createGame: (game: Game) => void
+  readonly setGameCell: (gameId: string, x: number, y: number, value: CellValue) => void
 }
 
 export const Business = ({ games }: Config): Business => {
@@ -39,9 +41,37 @@ export const Business = ({ games }: Config): Business => {
     games.push(newGame)
   }
 
+  const setGameCell = (gameId: string, x: number, y: number, value: CellValue) => {
+    const game = games.find(_ => _.id === gameId)
+
+    if (!game)
+      throw new Error() // TODO: proper error system
+
+    const cellValue = game.board[y][x]
+    if (value === CellValue.KnownClear) {
+      const lost = cellValue === CellValue.UnknownMine
+
+      if (lost) {
+        game.lost = true
+        return
+      }
+
+      const newBoard = recursiveSolve(game.board, x, y)
+
+      if (isWon(newBoard))
+        game.won = true
+
+      game.board = newBoard
+    } else if (value === CellValue.UnknownMineFlag) {
+      // TODO: toggle flag
+    }
+
+  }
+
   return {
     getGames,
     getGameById,
     createGame,
+    setGameCell,
   }
 }
