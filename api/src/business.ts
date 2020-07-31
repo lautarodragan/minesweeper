@@ -37,6 +37,8 @@ export const Business = ({ games }: Config): Business => {
       height,
       mineCount,
       board,
+      won: false,
+      lost: false,
     }
     games.push(newGame)
   }
