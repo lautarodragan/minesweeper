@@ -1,16 +1,10 @@
 import cors from '@koa/cors'
 import Koa from 'koa'
-import KoaRouter from'@koa/router'
 import KoaBodyparser from 'koa-bodyparser'
 
-const router = new KoaRouter()
+import { Router } from './routes'
 
-router.get('/', (ctx, next) => {
-  ctx.status = 200
-  ctx.body = {
-    message: 'hello world',
-  }
-})
+const router = Router()
 
 const koa = new Koa()
   .use(cors())
