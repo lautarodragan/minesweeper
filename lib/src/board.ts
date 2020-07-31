@@ -1,12 +1,12 @@
 import { CellValue } from './cell'
 
-export const makeEmptyBoard = (width, height) => Array(width).fill(null).map(y => Array(height).fill(CellValue.UnknownClear))
+export const makeEmptyBoard = (width: number, height: number) => Array(width).fill(null).map(y => Array(height).fill(CellValue.UnknownClear))
 
 export const mapBoard = (board, callback) => board.map((columnCells, y) => columnCells.map((cell, x) => callback(x, y, cell)))
 
 export const cloneBoard = (board) => mapBoard(board, (x, y, value) => value)
 
-export const makeMines = (width, height, mineCount) => {
+export const makeMines = (width: number, height: number, mineCount: number) => {
   const mines = []
 
   while (mines.length < mineCount) {
@@ -25,7 +25,7 @@ export const makeMines = (width, height, mineCount) => {
   return mines
 }
 
-export const makeBoard = (width, height, mineCount = 40) => {
+export const makeBoard = (width: number, height: number, mineCount = 40) => {
   const mines = makeMines(width, height, mineCount)
 
   return mapBoard(
@@ -34,7 +34,7 @@ export const makeBoard = (width, height, mineCount = 40) => {
   )
 }
 
-export const getSurroundingMineCount = (board, x, y) => {
+export const getSurroundingMineCount = (board, x: number, y: number) => {
   let sum = 0
   for (let j = Math.max(0, y - 1); j < Math.min(board.length, y + 2); j++)
     for (let i = Math.max(0, x - 1); i < Math.min(board[0].length, x + 2); i++)
@@ -43,7 +43,7 @@ export const getSurroundingMineCount = (board, x, y) => {
   return sum
 }
 
-export const getSurroundingFlagCount = (board, x, y) => {
+export const getSurroundingFlagCount = (board, x: number, y: number) => {
   let sum = 0
   for (let j = Math.max(0, y - 1); j < Math.min(board.length, y + 2); j++)
     for (let i = Math.max(0, x - 1); i < Math.min(board[0].length, x + 2); i++)

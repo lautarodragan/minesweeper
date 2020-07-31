@@ -1,7 +1,7 @@
 import { CellValue } from './cell'
 import { cloneBoard, getSurroundingMineCount } from './board'
 
-export const reveal = (board, x, y) => {
+export const reveal = (board, x: number, y: number) => {
   const newBoard = cloneBoard(board)
 
   const width = board[0].length
