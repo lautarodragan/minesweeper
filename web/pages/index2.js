@@ -73,12 +73,7 @@ export default function Home() {
   const [game, setGame] = useState(null)
 
   useEffect(() => {
-    createGame({
-      id: uuid(),
-      width: boardWidth,
-      height: boardHeight,
-      mineCount: boardMineCount,
-    }).then(setGame)
+    onReset()
   }, [])
 
   useEffect(() => {
@@ -192,7 +187,12 @@ export default function Home() {
     setWon(false)
     setStartTime(null)
     setGameDuration(null)
-    setBoard(makeBoard(boardWidth, boardHeight))
+    createGame({
+      id: uuid(),
+      width: boardWidth,
+      height: boardHeight,
+      mineCount: boardMineCount,
+    }).then(setGame)
   }
 
   const getClassNameForCell = (x, y, value) => {
