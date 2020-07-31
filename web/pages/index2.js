@@ -172,13 +172,7 @@ export default function Home() {
     if (surroundingMineCount !== surroundingFlagCount)
       return
 
-    const { losePosition, board: newBoard } = sweep(board, x, y)
-
-    if (losePosition) {
-      lose(losePosition)
-    } else {
-      setBoard(newBoard)
-    }
+    setCell(game.id, x, y, CellValue.KnownClear).then(setGame)
   }
 
   const onReset = () => {

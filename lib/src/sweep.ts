@@ -3,7 +3,12 @@ import { Board, cloneBoard } from './board'
 import { reveal } from './solve'
 import { Coord } from './coord'
 
-export const sweep = (board: Board, x: number, y: number) => {
+type Sweep = {
+  readonly losePosition?: Coord
+  readonly board?: Board
+}
+
+export const sweep = (board: Board, x: number, y: number): Sweep => {
   const losePosition = getSweepLosePosition(board, x, y)
 
   if (losePosition) {

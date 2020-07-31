@@ -1,4 +1,4 @@
-import { makeBoard, CellValue, toggleFlag } from '@taros-minesweeper/lib'
+import { makeBoard, CellValue, toggleFlag, sweep, getSurroundingFlagCount, getSurroundingMineCount } from '@taros-minesweeper/lib'
 
 import { Game } from './game'
 import { reveal, isWon } from '@taros-minesweeper/lib/dist'
@@ -51,20 +51,36 @@ export const Business = ({ games }: Config): Business => {
 
     const cellValue = game.board[y][x]
     if (value === CellValue.KnownClear) {
-      const lost = cellValue === CellValue.UnknownMine
+      if (cellValue === CellValue.UnknownClear || cellValue === CellValue.UnknownMine) {
+        const lost = cellValue === CellValue.UnknownMine
 
-      if (lost) {
-        game.lost = true
-        game.lostPosition = { x, y }
-        return
+        if (lost) {
+          game.lost = true
+          game.lostPosition = { x, y }
+          return
+        }
+
+        const newBoard = reveal(game.board, x, y)
+
+        if (isWon(newBoard))
+          game.won = true
+
+        game.board = newBoard
+      } else if (cellValue === CellValue.KnownClear) {
+        const surroundingMineCount = getSurroundingMineCount(game.board, x, y)
+        const surroundingFlagCount = getSurroundingFlagCount(game.board, x, y)
+
+        if (surroundingMineCount === surroundingFlagCount) {
+          const { losePosition, board: newBoard } = sweep(game.board, x, y)
+          if (losePosition) {
+            game.lost = true
+            game.lostPosition = losePosition
+          } else {
+            game.board = newBoard
+          }
+        }
+
       }
-
-      const newBoard = reveal(game.board, x, y)
-
-      if (isWon(newBoard))
-        game.won = true
-
-      game.board = newBoard
     } else if (value === CellValue.UnknownMineFlag) {
       game.board[y][x] = toggleFlag(cellValue)
     }
