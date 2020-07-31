@@ -55,6 +55,7 @@ export const Business = ({ games }: Config): Business => {
 
       if (lost) {
         game.lost = true
+        game.lostPosition = { x, y }
         return
       }
 

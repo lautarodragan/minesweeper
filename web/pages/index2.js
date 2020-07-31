@@ -84,7 +84,7 @@ export default function Home() {
     if (game.won)
       win()
     if (game.lost)
-      lose({ x: 1, y: 2}) // TODO: API not returning losePosition yet
+      lose(game.lostPosition)
   }, [game])
 
   const startTimeTracker = () => {
