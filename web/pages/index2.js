@@ -7,15 +7,8 @@ import { v4 as uuid } from 'uuid'
 import {
   CellValue,
   isUnknown,
-  toggleFlag,
-  getFlagCount,
   getSurroundingFlagCount,
   getSurroundingMineCount,
-  isWon,
-  makeBoard,
-  mapBoard,
-  reveal,
-  sweep,
 } from '@taros-minesweeper/lib'
 
 const NoSsr = dynamic(() => Promise.resolve(({ children }) => <>{children}</>), {
