@@ -1,7 +1,7 @@
 import { makeBoard, CellValue } from '@taros-minesweeper/lib'
 
 import { Game } from './game'
-import { recursiveSolve, isWon } from '@taros-minesweeper/lib/dist'
+import { reveal, isWon } from '@taros-minesweeper/lib/dist'
 
 interface Config {
   readonly games: Game[]
@@ -58,7 +58,7 @@ export const Business = ({ games }: Config): Business => {
         return
       }
 
-      const newBoard = recursiveSolve(game.board, x, y)
+      const newBoard = reveal(game.board, x, y)
 
       if (isWon(newBoard))
         game.won = true

@@ -13,7 +13,7 @@ import {
   isWon,
   makeBoard,
   mapBoard,
-  recursiveSolve,
+  reveal,
   sweep,
 } from '@taros-minesweeper/lib'
 
@@ -86,7 +86,7 @@ export default function Home() {
     if (value === CellValue.UnknownClear) {
       if (startTime === null)
         startTimeTracker()
-      setBoard(recursiveSolve(board, x, y))
+      setBoard(reveal(board, x, y))
     } else if (value === CellValue.UnknownMine) {
       lose({ x, y })
     }

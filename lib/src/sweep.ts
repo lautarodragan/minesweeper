@@ -1,6 +1,6 @@
 import { CellValue } from './cell'
 import { cloneBoard } from './board'
-import { recursiveSolve } from './solve'
+import { reveal } from './solve'
 
 export const sweep = (board, x, y) => {
   const losePosition = getSweepLosePosition(board, x, y)
@@ -21,7 +21,7 @@ const sweepSafely = (board, x, y) => {
   for (let i = Math.max(0, x - 1); i < Math.min(x + 2, boardWidth); i++)
     for (let j = Math.max(0, y - 1); j < Math.min(y + 2, boardHeight); j++) {
       if (board[j][i] === CellValue.UnknownClear)
-        newBoard = recursiveSolve(newBoard, i, j)
+        newBoard = reveal(newBoard, i, j)
     }
 
   return newBoard
