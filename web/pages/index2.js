@@ -11,6 +11,8 @@ import {
   getSurroundingMineCount,
 } from '@taros-minesweeper/lib'
 
+import { Nav } from '../components/nav'
+
 const NoSsr = dynamic(() => Promise.resolve(({ children }) => <>{children}</>), {
   ssr: false
 })
@@ -226,6 +228,7 @@ export default function Home() {
 
       <section className="game">
         <NoSsr>
+          <Nav/>
           <section className="top-bar">
             <div><span className="dseg">{boardMineCount - flagCount}</span></div>
             <div onClick={onReset} className={'smile ' + getSmileyClass()}></div>
