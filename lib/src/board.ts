@@ -1,10 +1,19 @@
 import { CellValue } from './cell'
 
-export const makeEmptyBoard = (width: number, height: number) => Array(width).fill(null).map(y => Array(height).fill(CellValue.UnknownClear))
+export type Board = CellValue[][]
 
-export const mapBoard = (board, callback) => board.map((columnCells, y) => columnCells.map((cell, x) => callback(x, y, cell)))
+export const makeEmptyBoard = (width: number, height: number): Board => Array(width).fill(null).map(y => Array(height).fill(CellValue.UnknownClear))
 
-export const cloneBoard = (board) => mapBoard(board, (x, y, value) => value)
+export const mapBoard = (board: Board, callback: (x: number, y: number, value: CellValue) => CellValue) =>
+  board.map(
+    (columnCells, y) =>
+      columnCells.map(
+        (cell, x) =>
+          callback(x, y, cell)
+      )
+  )
+
+export const cloneBoard = (board: Board): Board => mapBoard(board, (x, y, value) => value)
 
 export const makeMines = (width: number, height: number, mineCount: number) => {
   const mines = []
@@ -25,7 +34,7 @@ export const makeMines = (width: number, height: number, mineCount: number) => {
   return mines
 }
 
-export const makeBoard = (width: number, height: number, mineCount = 40) => {
+export const makeBoard = (width: number, height: number, mineCount = 40): Board => {
   const mines = makeMines(width, height, mineCount)
 
   return mapBoard(
@@ -34,7 +43,7 @@ export const makeBoard = (width: number, height: number, mineCount = 40) => {
   )
 }
 
-export const getSurroundingMineCount = (board, x: number, y: number) => {
+export const getSurroundingMineCount = (board, x: number, y: number): number => {
   let sum = 0
   for (let j = Math.max(0, y - 1); j < Math.min(board.length, y + 2); j++)
     for (let i = Math.max(0, x - 1); i < Math.min(board[0].length, x + 2); i++)
@@ -43,7 +52,7 @@ export const getSurroundingMineCount = (board, x: number, y: number) => {
   return sum
 }
 
-export const getSurroundingFlagCount = (board, x: number, y: number) => {
+export const getSurroundingFlagCount = (board, x: number, y: number): number => {
   let sum = 0
   for (let j = Math.max(0, y - 1); j < Math.min(board.length, y + 2); j++)
     for (let i = Math.max(0, x - 1); i < Math.min(board[0].length, x + 2); i++)
@@ -52,7 +61,7 @@ export const getSurroundingFlagCount = (board, x: number, y: number) => {
   return sum
 }
 
-export const getFlagCount = (board) => {
+export const getFlagCount = (board: Board): number => {
   let sum = 0
   for (let y = 0; y < board.length; y++)
     for (let x = 0; x < board[0].length; x++)
@@ -61,7 +70,7 @@ export const getFlagCount = (board) => {
   return sum
 }
 
-export const isWon = (board) => {
+export const isWon = (board: Board): boolean => {
   for (let y = 0; y < board.length; y++)
     for (let x = 0; x < board[0].length; x++)
       if ([CellValue.UnknownMine, CellValue.UnknownClear].includes(board[y][x]))

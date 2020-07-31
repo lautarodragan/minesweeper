@@ -1,8 +1,8 @@
 import { CellValue } from './cell'
-import { cloneBoard } from './board'
+import { Board, cloneBoard } from './board'
 import { reveal } from './solve'
 
-export const sweep = (board, x: number, y: number) => {
+export const sweep = (board: Board, x: number, y: number) => {
   const losePosition = getSweepLosePosition(board, x, y)
 
   if (losePosition) {
@@ -12,7 +12,7 @@ export const sweep = (board, x: number, y: number) => {
   }
 }
 
-const sweepSafely = (board, x: number, y: number) => {
+const sweepSafely = (board: Board, x: number, y: number): Board => {
   const boardWidth = board[0].length
   const boardHeight = board.length
 
@@ -27,7 +27,7 @@ const sweepSafely = (board, x: number, y: number) => {
   return newBoard
 }
 
-const getSweepLosePosition = (board, x: number, y: number) => {
+const getSweepLosePosition = (board: Board, x: number, y: number) => {
   const boardWidth = board[0].length
   const boardHeight = board.length
   for (let i = Math.max(0, x - 1); i < Math.min(x + 2, boardWidth); i++)
