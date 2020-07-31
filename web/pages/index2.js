@@ -31,11 +31,23 @@ const getCellText = (board, x, y) => {
   return surroundingMineCount
 }
 
+async function createGame(game) {
+  await fetch(`http://localhost:8000/games`, {
+    method: 'post',
+    body: JSON.stringify(game),
+    headers: {
+      'content-type': 'application/json',
+    }
+  })
+  const gameResponse = await fetch(`http://localhost:8000/games/${game.id}`)
+  return gameResponse.json()
+}
+
 export default function Home() {
   const [boardWidth, setBoardWidth] = useState(16)
   const [boardHeight, setBoardHeight] = useState(16)
   const [boardMineCount, setBoardMineCount] = useState(40)
-  const [board, setBoard] = useState(makeBoard(boardWidth, boardHeight, boardMineCount))
+  const [board, setBoard] = useState(null)
   const [lostPosition, setLostPosition] = useState(null)
   const [sweeperPosition, setSweeperPosition] = useState(null)
   const [cheatSeeMines, setCheatSeeMines] = useState(false)
@@ -44,6 +56,21 @@ export default function Home() {
   const [flagCount, setFlagCount] = useState(0)
   const [won, setWon] = useState(false)
   const gameDurationTimer = useRef(null)
+  const [game, setGame] = useState(null)
+
+  useEffect(() => {
+    createGame({
+      id: uuid(),
+      width: boardWidth,
+      height: boardHeight,
+      mineCount: boardMineCount,
+    }).then(setGame)
+  }, [])
+
+  useEffect(() => {
+    console.log('game changed', game)
+    setBoard(game.board)
+  }, [game])
 
   useEffect(() => {
     setFlagCount(getFlagCount(board))
