@@ -72,5 +72,33 @@ Generating IDs on the client-side is a standard practice when following the CQRS
 
 UUID collisions are possible, albeit unlikely. Astronomically unlikely, in theory. Here's [a cool read about generating UUIDs at scale, client side](https://medium.com/teads-engineering/generating-uuids-at-scale-on-the-web-2877f529d2a2). 
 
+### PUT /games/:id/cells/:cellId
 
+"Click" on a cell. 
+
+`cellId` is a make-shift id for cells, composed of the x and y coordinates of the cell concatenated, separated with a comma. For example: `1,2` will be the id of the cell at coordinates `(1, 2)`. 
+
+The expected body is an object with a `value` attribute, which indicates the value we want to set that cell to.
+
+```ts
+{
+  value: CellValue
+}
+```
+
+`PUT /games/03cd79d7-6c92-4ce7-b29a-790850537ad0/cells/1,2 { value: CellValue.ClearKnown }` would attempt to update the cell at position (1, 2) with the value `CellValue.ClearKnown`. 
+
+Response will always be `202 Accepted`. Client will need to re-request `GET /games/:id` to find out how the state of the game changed in response.
+
+#### Note on REST
+
+The client does not really know whether that is a valid state for the cell, as there could be a mine in that cell, which should transition the state of the game to `lost` instead. Under REST, this could be thought of as an authorization issue: a _regular_ user is not allowed to set that cell to that state if the current state is anything other than `CellValue.ClearUnknown`, but an _admin_ user could. 
+
+This authorization strategy is pretty standard in REST, but an issue raises next: if the requester lacks authorization, the API should respond with `401 Unauthorized`. But if the request is acknowledged and some mutation is performed in return, the API should respond with `200 OK` or `202 Accepted` to indicate so. 
+
+The two issues aforementioned, namely the make-shift id and the authorization strategy, are good indicators of the fact that REST is probably not the best approach for the backend. Nor would be GraphQL, which is practically an evolution of REST built over the same philosophy. 
+
+JSON-RPC or WebSockets would be more fitting.
+
+Having said this, there is nothing intrinsically wrong with this approach in practice, nor is drifting away from standards, if standards lag behind business needs. (i.e. no great hard would come from exposing a verb in the url, such as `POST /games/03cd79d7-6c92-4ce7-b29a-790850537ad0/reveal { x, y }` or `/reveal { x, y }`)
 
