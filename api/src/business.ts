@@ -1,4 +1,4 @@
-import { makeBoard, CellValue } from '@taros-minesweeper/lib'
+import { makeBoard, CellValue, toggleFlag } from '@taros-minesweeper/lib'
 
 import { Game } from './game'
 import { reveal, isWon } from '@taros-minesweeper/lib/dist'
@@ -65,7 +65,7 @@ export const Business = ({ games }: Config): Business => {
 
       game.board = newBoard
     } else if (value === CellValue.UnknownMineFlag) {
-      // TODO: toggle flag
+      game.board[y][x] = toggleFlag(cellValue)
     }
 
   }
