@@ -8,20 +8,27 @@ export const recursiveSolve = (board, x, y) => {
   const height = board.length
 
   const recursive = (x, y) => {
+    if (!isInBounds(x, y, width, height))
+      return
+
+    if (newBoard[y][x] !== CellValue.UnknownClear)
+      return
+
     newBoard[y][x] = CellValue.KnownClear
+
     if (getSurroundingMineCount(board, x, y))
       return
-    if (x < width - 1 && newBoard[y][x + 1] === CellValue.UnknownClear)
-      recursive(x + 1, y)
-    if (x > 0 && newBoard[y][x - 1] === CellValue.UnknownClear)
-      recursive(x - 1, y)
-    if (y < height - 1 && newBoard[y + 1][x] === CellValue.UnknownClear)
-      recursive(x, y + 1)
-    if (y > 0 && newBoard[y - 1][x] === CellValue.UnknownClear)
-      recursive(x, y - 1)
+
+    recursive(x + 1, y)
+    recursive(x - 1, y)
+    recursive(x, y + 1)
+    recursive(x, y - 1)
   }
 
   recursive(x, y)
 
   return newBoard
 }
+
+const isInBounds = (x: number, y: number, width: number, height: number): boolean =>
+  x >= 0 && x < width && y > 0 && y < height
