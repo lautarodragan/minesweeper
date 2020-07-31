@@ -54,7 +54,7 @@ export const Router = ({ business }: Config) => {
     const [x, y] = cellId.split(',')
 
     try {
-      business.setGameCell(gameId, x, y, value)
+      business.setGameCell(gameId, parseInt(x), parseInt(y), value)
       ctx.status = 200
     } catch (error) {
       // Assume error is always 404 Game Not Found. We'll decouple this later.
