@@ -24,20 +24,24 @@ const getCellText = (board, x, y) => {
   return surroundingMineCount
 }
 
+const apiUrl = process.env.API_URL
+
+console.log({ apiUrl })
+
 async function createGame(game) {
-  await fetch(`http://localhost:8000/games`, {
+  await fetch(`${apiUrl}/games`, {
     method: 'post',
     body: JSON.stringify(game),
     headers: {
       'content-type': 'application/json',
     },
   })
-  const gameResponse = await fetch(`http://localhost:8000/games/${game.id}`)
+  const gameResponse = await fetch(`${apiUrl}/games/${game.id}`)
   return gameResponse.json()
 }
 
 async function setCell(gameId, x, y, value) {
-  await fetch(`http://localhost:8000/games/${gameId}/cells/${x},${y}`, {
+  await fetch(`${apiUrl}/games/${gameId}/cells/${x},${y}`, {
     method: 'put',
     body: JSON.stringify({
       value,
@@ -46,7 +50,7 @@ async function setCell(gameId, x, y, value) {
       'content-type': 'application/json',
     },
   })
-  const gameResponse = await fetch(`http://localhost:8000/games/${gameId}`)
+  const gameResponse = await fetch(`${apiUrl}/games/${gameId}`)
   return gameResponse.json()
 }
 
