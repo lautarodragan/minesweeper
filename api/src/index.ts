@@ -1,15 +1,7 @@
-import cors from '@koa/cors'
-import Koa from 'koa'
-import KoaBodyparser from 'koa-bodyparser'
-
 import { Router } from './routes'
+import { Server } from './server'
 
 const router = Router()
+const server = Server({ router })
 
-const koa = new Koa()
-  .use(cors())
-  .use(KoaBodyparser())
-  .use(router.routes())
-  .use(router.allowedMethods())
-
-const server = koa.listen(8000, '0.0.0.0')
+server.start()
