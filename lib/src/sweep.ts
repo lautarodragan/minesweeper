@@ -1,4 +1,4 @@
-import { CELL_UNKNOWN_CLEAR, CELL_UNKNOWN_MINE } from './cell'
+import { CellValue } from './cell'
 import { cloneBoard } from './board'
 import { recursiveSolve } from './solve'
 
@@ -20,7 +20,7 @@ const sweepSafely = (board, x, y) => {
 
   for (let i = Math.max(0, x - 1); i < Math.min(x + 2, boardWidth); i++)
     for (let j = Math.max(0, y - 1); j < Math.min(y + 2, boardHeight); j++) {
-      if (board[j][i] === CELL_UNKNOWN_CLEAR)
+      if (board[j][i] === CellValue.UnknownClear)
         newBoard = recursiveSolve(newBoard, i, j)
     }
 
@@ -32,7 +32,7 @@ const getSweepLosePosition = (board, x, y) => {
   const boardHeight = board.length
   for (let i = Math.max(0, x - 1); i < Math.min(x + 2, boardWidth); i++)
     for (let j = Math.max(0, y - 1); j < Math.min(y + 2, boardHeight); j++)
-      if (board[j][i] === CELL_UNKNOWN_MINE)
+      if (board[j][i] === CellValue.UnknownMine)
         return { x: i, y: j }
   return null
 }

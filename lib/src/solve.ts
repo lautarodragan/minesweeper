@@ -1,4 +1,4 @@
-import { CELL_KNOWN_CLEAR, CELL_UNKNOWN_CLEAR } from './cell'
+import { CellValue } from './cell'
 import { cloneBoard, getSurroundingMineCount } from './board'
 
 export const recursiveSolve = (board, x, y) => {
@@ -8,16 +8,16 @@ export const recursiveSolve = (board, x, y) => {
   const height = board.length
 
   const recursive = (x, y) => {
-    newBoard[y][x] = CELL_KNOWN_CLEAR
+    newBoard[y][x] = CellValue.KnownClear
     if (getSurroundingMineCount(board, x, y))
       return
-    if (x < width - 1 && newBoard[y][x + 1] === CELL_UNKNOWN_CLEAR)
+    if (x < width - 1 && newBoard[y][x + 1] === CellValue.UnknownClear)
       recursive(x + 1, y)
-    if (x > 0 && newBoard[y][x - 1] === CELL_UNKNOWN_CLEAR)
+    if (x > 0 && newBoard[y][x - 1] === CellValue.UnknownClear)
       recursive(x - 1, y)
-    if (y < height - 1 && newBoard[y + 1][x] === CELL_UNKNOWN_CLEAR)
+    if (y < height - 1 && newBoard[y + 1][x] === CellValue.UnknownClear)
       recursive(x, y + 1)
-    if (y > 0 && newBoard[y - 1][x] === CELL_UNKNOWN_CLEAR)
+    if (y > 0 && newBoard[y - 1][x] === CellValue.UnknownClear)
       recursive(x, y - 1)
   }
 
