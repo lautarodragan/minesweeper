@@ -1,4 +1,5 @@
 import { CellValue } from './cell'
+import { Coord } from './coord'
 
 export type Board = CellValue[][]
 
@@ -15,7 +16,7 @@ export const mapBoard = (board: Board, callback: (x: number, y: number, value: C
 
 export const cloneBoard = (board: Board): Board => mapBoard(board, (x, y, value) => value)
 
-export const makeMines = (width: number, height: number, mineCount: number) => {
+export const makeMines = (width: number, height: number, mineCount: number): readonly Coord[] => {
   const mines = []
 
   while (mines.length < mineCount) {
