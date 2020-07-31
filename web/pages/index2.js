@@ -37,9 +37,23 @@ async function createGame(game) {
     body: JSON.stringify(game),
     headers: {
       'content-type': 'application/json',
-    }
+    },
   })
   const gameResponse = await fetch(`http://localhost:8000/games/${game.id}`)
+  return gameResponse.json()
+}
+
+async function setCell(gameId, x, y, value) {
+  await fetch(`http://localhost:8000/games/${gameId}/cells/${x},${y}`, {
+    method: 'put',
+    body: JSON.stringify({
+      value,
+    }),
+    headers: {
+      'content-type': 'application/json',
+    },
+  })
+  const gameResponse = await fetch(`http://localhost:8000/games/${gameId}`)
   return gameResponse.json()
 }
 
@@ -69,16 +83,14 @@ export default function Home() {
 
   useEffect(() => {
     console.log('game changed', game)
+    if (!game)
+      return
     setBoard(game.board)
     if (game.won)
       win()
+    if (game.lost)
+      lose({ x: 1, y: 2}) // TODO: API not returning losePosition yet
   }, [game])
-
-  const setCell = (x, y, value) => setBoard(mapBoard(board, (x2, y2, value2) => (
-    x === x2 && y === y2
-      ? value
-      : value2
-  )))
 
   const startTimeTracker = () => {
     const startTime = DateTime.utc()
@@ -104,16 +116,12 @@ export default function Home() {
   }
 
   const onClick = (x, y, value) => {
-    if (won || lostPosition)
+    if (game.won || game.lost)
       return
 
-    if (value === CellValue.UnknownClear) {
-      if (startTime === null)
-        startTimeTracker()
-      setBoard(reveal(board, x, y))
-    } else if (value === CellValue.UnknownMine) {
-      lose({ x, y })
-    }
+    if (startTime === null)
+      startTimeTracker()
+    setCell(game.id, x, y, CellValue.KnownClear).then(setGame)
   }
 
   const onContextMenu = (x, y) => (event) => {
@@ -125,7 +133,7 @@ export default function Home() {
     if (!isUnknown(board[y][x]))
       return
 
-    setCell(x, y, toggleFlag(board[y][x]))
+    setCell(game.id, x, y, CellValue.UnknownMineFlag).then(setGame)
   }
 
   const onMouseDown = (x, y, value) => (event) => {
@@ -234,7 +242,7 @@ export default function Home() {
           </section>
           <section className="board">
             {
-              board.map((columnCells, y) => (
+              board && board.map((columnCells, y) => (
                 columnCells.map((cell, x) => (
                   <div
                     key={`${x}, ${y}`}
