@@ -96,14 +96,25 @@ export default function Home() {
     if (won || lostPosition)
       return
 
-    if (board[y][x] === CellValue.UnknownClear)
-      setCell(x, y, CellValue.UnknownClearFlag)
-    else if (board[y][x] === CellValue.UnknownMine)
-      setCell(x, y, CellValue.UnknownMineFlag)
-    else if (board[y][x] === CellValue.UnknownClearFlag)
-      setCell(x, y, CellValue.UnknownClear)
-    else if (board[y][x] === CellValue.UnknownMineFlag)
-      setCell(x, y, CellValue.UnknownMine)
+    const toggleFlag = (currentCellValue) => {
+      if (currentCellValue === CellValue.UnknownClear)
+        return CellValue.UnknownClearFlag
+      else if (currentCellValue === CellValue.UnknownMine)
+        return CellValue.UnknownMineFlag
+      else if (currentCellValue === CellValue.UnknownClearFlag)
+        return CellValue.UnknownClear
+      else if (currentCellValue === CellValue.UnknownMineFlag)
+        return CellValue.UnknownMine
+      throw new Error("This cell can't be flagged.")
+    }
+
+    const isUnknown = (value) =>
+      [CellValue.UnknownClear, CellValue.UnknownMine, CellValue.UnknownClearFlag, CellValue.UnknownMineFlag].includes(value)
+
+    if (!isUnknown(board[y][x]))
+      return
+
+    setCell(x, y, toggleFlag(board[y][x]))
   }
 
   const onMouseDown = (x, y, value) => (event) => {
