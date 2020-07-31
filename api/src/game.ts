@@ -3,4 +3,5 @@ export interface Game {
   readonly width: number
   readonly height: number
   readonly mineCount: number
+  board: any
 }
