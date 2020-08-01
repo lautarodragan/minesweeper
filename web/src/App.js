@@ -175,12 +175,7 @@ export default function App() {
           onSweep={onSweep}
           onFlag={onFlag}
         />
-        <section className="toolbar">
-          <div className="checkbox">
-            <input id="cheat-see-mines" type="checkbox" value={cheatSeeMines} onChange={() => setCheatSeeMines(!cheatSeeMines)} />
-            <label htmlFor="cheat-see-mines">Cheat: See Mines</label>
-          </div>
-        </section>
+        <Toolbar cheatSeeMines={cheatSeeMines} onCheatSeeMines={setCheatSeeMines} />
       </section>
 
       <style jsx global>{`
@@ -195,3 +190,12 @@ export default function App() {
     </div>
   )
 }
+
+const Toolbar = ({ cheatSeeMines, onCheatSeeMines }) => (
+  <section className="toolbar">
+    <div className="checkbox">
+      <input id="cheat-see-mines" type="checkbox" value={cheatSeeMines} onChange={() => onCheatSeeMines(!cheatSeeMines)} />
+      <label htmlFor="cheat-see-mines">Cheat: See Mines</label>
+    </div>
+  </section>
+)
