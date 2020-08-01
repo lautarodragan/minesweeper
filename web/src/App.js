@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { DateTime } from 'luxon'
 import React, { useState, useEffect, useRef } from 'react'
 
@@ -17,6 +18,13 @@ import {
 
 import './App.css';
 
+const LoginButton = () => {
+  const { loginWithRedirect } = useAuth0();
+
+  return <button onClick={() => loginWithRedirect()}>Log In</button>;
+};
+
+
 const getCellText = (board, x, y) => {
   if (board[y][x] !== CellValue.KnownClear)
     return ''
@@ -27,6 +35,22 @@ const getCellText = (board, x, y) => {
 }
 
 // import {Nav} from '../../web-next/components/nav'
+
+const Profile = () => {
+  const { user, isAuthenticated } = useAuth0();
+
+  console.log('Profile', isAuthenticated, user)
+
+  return (
+    isAuthenticated && (
+      <div>
+        <img src={user.picture} alt={user.name} />
+        <h2>{user.name}</h2>
+        <p>{user.email}</p>
+      </div>
+    )
+  );
+};
 
 export default function App() {
   const [boardWidth, setBoardWidth] = useState(16)
@@ -195,6 +219,8 @@ export default function App() {
   return (
     <div className="container">
       <section className="game">
+        <LoginButton/>
+        <Profile/>
         <section className="top-bar">
           <div><span className="dseg">{boardMineCount - flagCount}</span></div>
           <div onClick={onReset} className={'smile ' + getSmileyClass()}></div>
