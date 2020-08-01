@@ -1,10 +1,10 @@
+import { useAuth0 } from '@auth0/auth0-react'
 import React, { useState, useEffect } from 'react'
 
 import './App.css'
 
 import { ClientMinesweeper } from './components/ClientMinesweeper'
 import { Nav } from './components/Nav'
-import {useAuth0} from '@auth0/auth0-react'
 
 export default function App() {
   const [background, setBackground] = useState(0)
