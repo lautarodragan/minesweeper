@@ -17,22 +17,13 @@ import {
 } from '@taros-minesweeper/lib'
 
 import './App.css';
+import {Minesweeper} from './components/Minesweeper'
 
 const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
 
   return <button onClick={() => loginWithRedirect()}>Log In</button>;
 };
-
-
-const getCellText = (board, x, y) => {
-  if (board[y][x] !== CellValue.KnownClear)
-    return ''
-  const surroundingMineCount = getSurroundingMineCount(board, x, y)
-  if (surroundingMineCount < 1)
-    return ''
-  return surroundingMineCount
-}
 
 // import {Nav} from '../../web-next/components/nav'
 
@@ -58,7 +49,6 @@ export default function App() {
   const [boardMineCount, setBoardMineCount] = useState(40)
   const [board, setBoard] = useState(makeBoard(boardWidth, boardHeight, boardMineCount))
   const [lostPosition, setLostPosition] = useState(null)
-  const [sweeperPosition, setSweeperPosition] = useState(null)
   const [cheatSeeMines, setCheatSeeMines] = useState(false)
   const [startTime, setStartTime] = useState(null)
   const [gameDuration, setGameDuration] = useState(null)
@@ -73,8 +63,10 @@ export default function App() {
 
   useEffect(() => {
     setFlagCount(getFlagCount(board))
-    if (isWon(board))
-      win()
+    if (isWon(board)) {
+      stopTimeTracker()
+      setWon(true)
+    }
   }, [board])
 
   const switchBackground = () => {
@@ -111,12 +103,7 @@ export default function App() {
     setLostPosition(losePosition)
   }
 
-  const win = () => {
-    stopTimeTracker()
-    setWon(true)
-  }
-
-  const onClick = (x, y, value) => {
+  const onReveal = (x, y, value) => {
     if (won || lostPosition)
       return
 
@@ -129,49 +116,7 @@ export default function App() {
     }
   }
 
-  const onContextMenu = (x, y) => (event) => {
-    event.preventDefault()
-
-    if (won || lostPosition)
-      return
-
-    if (!isUnknown(board[y][x]))
-      return
-
-    setCell(x, y, toggleFlag(board[y][x]))
-  }
-
-  const onMouseDown = (x, y, value) => (event) => {
-    event.preventDefault()
-
-    if (won || lostPosition)
-      return
-
-    if (event.buttons === 3)
-      setSweeperPosition({ x, y })
-  }
-
-  const onMouseMove = (x, y, value) => (event) => {
-    event.preventDefault()
-
-    if (won || lostPosition)
-      return
-
-    if (event.buttons === 3)
-      setSweeperPosition({ x, y })
-  }
-
-  const onMouseUp = (x, y, value) => (event) => {
-    event.preventDefault()
-
-    if (won || lostPosition)
-      return
-
-    setSweeperPosition(null)
-
-    if (event.button !== 0 || board[y][x] !== CellValue.KnownClear)
-      return
-
+  const onSweep = (x, y, value) => {
     const surroundingMineCount = getSurroundingMineCount(board, x, y)
 
     if (!surroundingMineCount)
@@ -191,6 +136,18 @@ export default function App() {
     }
   }
 
+  const onFlag = (x, y) => (event) => {
+    event.preventDefault()
+
+    if (won || lostPosition)
+      return
+
+    if (!isUnknown(board[y][x]))
+      return
+
+    setCell(x, y, toggleFlag(board[y][x]))
+  }
+
   const onReset = () => {
     stopTimeTracker()
     setLostPosition(null)
@@ -200,67 +157,24 @@ export default function App() {
     setBoard(makeBoard(boardWidth, boardHeight))
   }
 
-  const getClassNameForCell = (x, y, value) => {
-    if (lostPosition && lostPosition.x === x && lostPosition.y === y)
-      return 'lost'
-    if ((value === CellValue.UnknownMine || value === CellValue.UnknownClear)
-      && sweeperPosition
-      && sweeperPosition.x >= x - 1
-      && sweeperPosition.x <= x + 1
-      && sweeperPosition.y >= y - 1
-      && sweeperPosition.y <= y + 1)
-      return 'clear'
-    if (lostPosition && value === CellValue.UnknownMine )
-      return 'mine'
-    if (!lostPosition && value === CellValue.UnknownMine)
-      return cheatSeeMines ? 'unknown mine' : 'unknown'
-    if (value === CellValue.KnownClear)
-      return 'clear'
-    if (value === CellValue.UnknownClearFlag || value === CellValue.UnknownMineFlag)
-      return 'unknown flag'
-    return 'unknown'
-  }
-
-  const getSmileyClass = () => {
-    if (lostPosition)
-      return 'lost'
-    if (sweeperPosition)
-      return 'wondering'
-    if (won)
-      return 'won'
-    return ''
-  }
-
   return (
     <div className="container" onClick={onContainerClick}>
       <section className="game">
         <LoginButton/>
         <Profile/>
-        <section className="top-bar">
-          <div><span className="dseg">{boardMineCount - flagCount}</span></div>
-          <div onClick={onReset} className={'smile ' + getSmileyClass()}></div>
-          <div><span className="dseg">{gameDuration || '00:00'}</span></div>
-        </section>
-        <section className="board">
-          {
-            board.map((columnCells, y) => (
-              columnCells.map((cell, x) => (
-                <div
-                  key={`${x}, ${y}`}
-                  title={`(${x}, ${y}) ${cell}`}
-                  onClick={() => onClick(x, y, cell)}
-                  onContextMenuCapture={onContextMenu(x, y)}
-                  onMouseDown={onMouseDown(x, y, cell)}
-                  onMouseMove={onMouseMove(x, y, cell)}
-                  onMouseUp={onMouseUp(x, y, cell)}
-                  className={getClassNameForCell(x, y, cell)}
-                >
-                  {getCellText(board, x, y)}
-                </div>
-              ))
-            ))
-          }
-        </section>
+        <Minesweeper
+          board={board}
+          mineCount={boardMineCount}
+          flagCount={flagCount}
+          won={won}
+          lostPosition={lostPosition}
+          cheatSeeMines={cheatSeeMines}
+          gameDuration={gameDuration}
+          onReset={onReset}
+          onReveal={onReveal}
+          onSweep={onSweep}
+          onFlag={onFlag}
+        />
         <section className="toolbar">
           <div className="checkbox">
             <input id="cheat-see-mines" type="checkbox" value={cheatSeeMines} onChange={() => setCheatSeeMines(!cheatSeeMines)} />
