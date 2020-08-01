@@ -16,7 +16,7 @@ export const Minesweeper = ({
 }) => {
   const [sweeperPosition, setSweeperPosition] = useState(null)
 
-  const getSmileyClass = () => {
+  const getClassNameForSmiley = () => {
     if (lostPosition)
       return 'lost'
     if (sweeperPosition)
@@ -87,7 +87,7 @@ export const Minesweeper = ({
     <section>
       <section className="top-bar">
         <div><span className="dseg">{mineCount - flagCount}</span></div>
-        <div onClick={onReset} className={'smile ' + getSmileyClass()}></div>
+        <div onClick={onReset} className={'smile ' + getClassNameForSmiley()}></div>
         <div><span className="dseg">{gameDuration || '00:00'}</span></div>
       </section>
       <section className="board">
