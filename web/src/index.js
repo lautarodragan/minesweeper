@@ -13,6 +13,7 @@ ReactDOM.render(
       domain="dev-xzyu9ho6.us.auth0.com"
       clientId="wf7HEPTOdHDXXf7BfXvtJNevXZ5rv6T8"
       redirectUri={window.location.origin}
+      audience="https://taros-minesweeper.herokuapp.com"
     >
       <App />
     </Auth0Provider>
