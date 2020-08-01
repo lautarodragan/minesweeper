@@ -4,14 +4,13 @@ import React, { useState, useEffect } from 'react'
 import './App.css';
 
 import { ClientMinesweeper } from './components/ClientMinesweeper'
+import { Nav } from './components/Nav'
 
 const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
 
   return <button onClick={() => loginWithRedirect()}>Log In</button>;
 };
-
-// import {Nav} from '../../web-next/components/nav'
 
 const Profile = () => {
   const { user, isAuthenticated } = useAuth0();
@@ -32,6 +31,7 @@ const Profile = () => {
 export default function App() {
   const [background, setBackground] = useState(0)
   const [cheatSeeMines, setCheatSeeMines] = useState(false)
+  const [version, setVersion] = useState('client')
 
   useEffect(() => {
     switchBackground()
@@ -52,6 +52,7 @@ export default function App() {
       <section className="game">
         <LoginButton/>
         <Profile/>
+        <Nav version={version} onVersion={setVersion}/>
         <ClientMinesweeper
           cheatSeeMines={cheatSeeMines}
         />
