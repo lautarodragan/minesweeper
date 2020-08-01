@@ -220,7 +220,7 @@ export default function App() {
             ))
           }
         </section>
-        <section>
+        <section className="toolbar">
           <div className="checkbox">
             <input id="cheat-see-mines" type="checkbox" value={cheatSeeMines} onChange={() => setCheatSeeMines(!cheatSeeMines)} />
             <label htmlFor="cheat-see-mines">Cheat: See Mines</label>

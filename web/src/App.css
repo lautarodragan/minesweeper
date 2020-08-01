@@ -124,6 +124,11 @@ section.board div.flag {
   background-size: contain;
 }
 
+.toolbar {
+  background-color: #c0c0c0;
+  padding: 6px;
+}
+
 .checkbox {
   display: flex;
   flex-direction: row;
