@@ -178,7 +178,7 @@ export default function App() {
         <Toolbar cheatSeeMines={cheatSeeMines} onCheatSeeMines={setCheatSeeMines} />
       </section>
 
-      <style jsx global>{`
+      <style>{`
         body {
           background-image: url(/wallpapers/${background}.png);
         }
