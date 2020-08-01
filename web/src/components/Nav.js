@@ -6,8 +6,6 @@ import './Nav.css'
 export const Nav = ({ version, onVersion }) => {
   const { isAuthenticated, user } = useAuth0()
 
-  console.log('Profile', isAuthenticated, user)
-
   return (
     <nav>
       { !isAuthenticated && <LoginButton /> }

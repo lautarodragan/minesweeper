@@ -4,15 +4,27 @@ import './App.css'
 
 import { ClientMinesweeper } from './components/ClientMinesweeper'
 import { Nav } from './components/Nav'
+import {useAuth0} from '@auth0/auth0-react'
 
 export default function App() {
   const [background, setBackground] = useState(0)
   const [cheatSeeMines, setCheatSeeMines] = useState(false)
   const [version, setVersion] = useState('client')
+  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0()
+  const [accessToken, setAccessToken] = useState('')
 
   useEffect(() => {
     switchBackground()
   }, [])
+
+  useEffect(() => {
+    if (isAuthenticated)
+      getAccessTokenSilently().then(setAccessToken)
+  }, [isAuthenticated])
+
+  useEffect(() => {
+    console.log('accessToken', accessToken)
+  }, [accessToken])
 
   const switchBackground = () => {
     setBackground(Math.floor(Math.random() * 5) + 1)
