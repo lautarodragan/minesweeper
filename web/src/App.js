@@ -81,6 +81,12 @@ export default function App() {
     setBackground(Math.floor(Math.random() * 5) + 1)
   }
 
+  const onContainerClick = (event) => {
+    if (event.target !== event.currentTarget)
+      return
+    switchBackground()
+  }
+
   const setCell = (x, y, value) => setBoard(mapBoard(board, (x2, y2, value2) => (
     x === x2 && y === y2
       ? value
@@ -226,7 +232,7 @@ export default function App() {
   }
 
   return (
-    <div className="container">
+    <div className="container" onClick={onContainerClick}>
       <section className="game">
         <LoginButton/>
         <Profile/>
