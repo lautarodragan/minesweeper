@@ -65,12 +65,21 @@ export default function App() {
   const [flagCount, setFlagCount] = useState(0)
   const [won, setWon] = useState(false)
   const gameDurationTimer = useRef(null)
+  const [background, setBackground] = useState(0)
+
+  useEffect(() => {
+    switchBackground()
+  }, [])
 
   useEffect(() => {
     setFlagCount(getFlagCount(board))
     if (isWon(board))
       win()
   }, [board])
+
+  const switchBackground = () => {
+    setBackground(Math.floor(Math.random() * 5) + 1)
+  }
 
   const setCell = (x, y, value) => setBoard(mapBoard(board, (x2, y2, value2) => (
     x === x2 && y === y2
@@ -256,7 +265,7 @@ export default function App() {
 
       <style jsx global>{`
         body {
-          background-image: url(/wallpapers/${Math.floor(Math.random() * 5) + 1}.png);
+          background-image: url(/wallpapers/${background}.png);
         }
         section.board {
           display: grid;
