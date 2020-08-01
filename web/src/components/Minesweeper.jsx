@@ -110,6 +110,11 @@ export const Minesweeper = ({
           ))
         }
       </section>
+      <style>{`
+        section.board {
+          grid-template-columns: repeat(${board[0].length}, 1fr);
+        }
+      `}</style>
     </section>
   )
 }
