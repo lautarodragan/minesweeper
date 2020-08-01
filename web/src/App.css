@@ -74,6 +74,11 @@ div.smile.wondering {
 div.smile.won {
   background-image: url(/smile-won.png);
 }
+section.board-container {
+  display: flex;
+  justify-content: center;
+  background-color: #c0c0c0;
+}
 
 section.board {
   display: grid;
@@ -82,7 +87,6 @@ section.board {
 section.board div {
   width: 30px;
   height: 30px;
-  background-color: #c0c0c0;
   display: flex;
   align-items: center;
   justify-content: center;

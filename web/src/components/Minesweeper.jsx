@@ -90,25 +90,27 @@ export const Minesweeper = ({
         <div onClick={onReset} className={'smile ' + getClassNameForSmiley()}></div>
         <div><span className="dseg">{gameDuration || '00:00'}</span></div>
       </section>
-      <section className="board">
-        {
-          board.map((columnCells, y) => (
-            columnCells.map((cell, x) => (
-              <div
-                key={`${x}, ${y}`}
-                title={`(${x}, ${y}) ${cell}`}
-                onClick={() => onReveal(x, y, cell)}
-                onContextMenuCapture={onFlag(x, y)}
-                onMouseDown={onMouseDown(x, y, cell)}
-                onMouseMove={onMouseMove(x, y, cell)}
-                onMouseUp={onMouseUp(x, y, cell)}
-                className={getClassNameForCell(x, y, cell)}
-              >
-                {getCellText(board, x, y)}
-              </div>
+      <section className="board-container">
+        <section className="board">
+          {
+            board.map((columnCells, y) => (
+              columnCells.map((cell, x) => (
+                <div
+                  key={`${x}, ${y}`}
+                  title={`(${x}, ${y}) ${cell}`}
+                  onClick={() => onReveal(x, y, cell)}
+                  onContextMenuCapture={onFlag(x, y)}
+                  onMouseDown={onMouseDown(x, y, cell)}
+                  onMouseMove={onMouseMove(x, y, cell)}
+                  onMouseUp={onMouseUp(x, y, cell)}
+                  className={getClassNameForCell(x, y, cell)}
+                >
+                  {getCellText(board, x, y)}
+                </div>
+              ))
             ))
-          ))
-        }
+          }
+        </section>
       </section>
       <style>{`
         section.board {

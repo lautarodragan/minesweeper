@@ -5,7 +5,7 @@ nav {
     background-color: #c0c0c0;
 }
 
-span {
+nav span {
     color: black;
     text-decoration: none;
     padding: 8px;
@@ -15,9 +15,33 @@ span {
     border-right: 3px solid #808080;
 }
 
-span.active {
+nav span.active {
     border-top: 3px solid #808080;
     border-left: 3px solid #808080;
     border-bottom: 3px solid #fff;
     border-right: 3px solid #fff;
+}
+
+nav .profile {
+  display: flex;
+}
+
+nav .profile img {
+  max-height: 100px;
+  border-radius: 50%;
+}
+
+nav .profile>div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 10px;
+}
+
+nav .profile>div h2 {
+  margin: 2px 0;
+}
+
+nav .profile>div p {
+  margin: 2px 0;
 }
