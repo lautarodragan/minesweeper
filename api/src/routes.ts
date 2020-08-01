@@ -10,6 +10,7 @@ export const Router = ({ business }: Config) => {
   const router = new KoaRouter()
 
   router.get('/', (ctx, next) => {
+    console.log('/', ctx.state.user)
     ctx.status = 200
     ctx.body = {
       message: 'hello world',
