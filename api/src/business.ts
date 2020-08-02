@@ -19,6 +19,7 @@ export const Business = ({ games }: Config): Business => {
   const getGames = (userId: string) =>
     games
       .filter(game => game.userId === userId)
+      .sort((a: Game, b: Game) => a.creationDate > b.creationDate ? -1 : a.creationDate < b.creationDate ? 1 : 0)
       .map(({ board, ...game }) => ({ ...game }))
 
   const getGameById = (id: string) => {
@@ -38,6 +39,7 @@ export const Business = ({ games }: Config): Business => {
     const newGame = {
       userId,
       id,
+      creationDate: new Date().toISOString(),
       width,
       height,
       mineCount,
