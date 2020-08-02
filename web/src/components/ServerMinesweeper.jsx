@@ -59,7 +59,7 @@ export const ServerMinesweeper = ({ accessToken, cheatSeeMines }) => {
     if (!game)
       return
     setFlagCount(getFlagCount(game.board))
-    if (game.won) {
+    if (game.won || game.lost) {
       stopTimeTracker()
     }
   }, [game])
