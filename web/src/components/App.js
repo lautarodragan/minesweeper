@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react'
 
 import './App.css'
 
-import { ClientMinesweeper } from './components/ClientMinesweeper'
-import { Nav } from './components/Nav'
-import { ServerMinesweeper } from './components/ServerMinesweeper'
+import { ClientMinesweeper } from './ClientMinesweeper'
+import { Nav } from './Nav'
+import { ServerMinesweeper } from './ServerMinesweeper'
 
 export default function App() {
   const [background, setBackground] = useState(0)
