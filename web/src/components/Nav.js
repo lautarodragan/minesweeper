@@ -11,15 +11,11 @@ export const Nav = () => {
     <nav>
       { !isAuthenticated && <LoginButton /> }
       { isAuthenticated && <Profile user={user} /> }
-      <div>
-        <div>
-          <Link to="/play/offline" >Play Offline</Link>
-          <Link to="/play/online" >Play Online</Link>
-        </div>
-        <div>
-          <Link to="/games">My Games</Link>
-        </div>
-      </div>
+      <section className="links">
+        <Link to="/play/offline" >Play Offline</Link>
+        <Link to="/play/online" >Play Online</Link>
+        <Link to="/games">My Games</Link>
+      </section>
     </nav>
   )
 }

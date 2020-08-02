@@ -5,7 +5,12 @@ nav {
   background-color: #c0c0c0;
 }
 
-nav span {
+nav .links {
+  display: flex;
+  flex-direction: column;
+}
+
+nav .links a {
   display: inline-block;
   color: black;
   text-decoration: none;
@@ -16,7 +21,7 @@ nav span {
   border-right: 3px solid #808080;
 }
 
-nav span.active {
+nav .links a.active {
   border-top: 3px solid #808080;
   border-left: 3px solid #808080;
   border-bottom: 3px solid #fff;
