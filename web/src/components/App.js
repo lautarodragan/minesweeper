@@ -47,12 +47,8 @@ export default function App() {
   return (
     <div className="container" onClick={onContainerClick}>
       <section className="game">
-        <Nav version={version} onVersion={setVersion}/>
-        {
-          version === 'client'
-            ? <ClientMinesweeper cheatSeeMines={cheatSeeMines} />
-            : <ServerMinesweeper apiClient={apiClient} cheatSeeMines={cheatSeeMines} />
-        }
+        <Nav version={version} onVersion={setVersion} />
+        <MinesweeperX version={version} apiClient={apiClient} cheatSeeMines={cheatSeeMines} />
         <Toolbar cheatSeeMines={cheatSeeMines} onCheatSeeMines={setCheatSeeMines} />
       </section>
 
@@ -73,3 +69,8 @@ const Toolbar = ({ cheatSeeMines, onCheatSeeMines }) => (
     </div>
   </section>
 )
+
+const MinesweeperX = ({ version, apiClient, cheatSeeMines }) =>
+  version === 'client'
+    ? <ClientMinesweeper cheatSeeMines={cheatSeeMines} />
+    : <ServerMinesweeper apiClient={apiClient} cheatSeeMines={cheatSeeMines} />
