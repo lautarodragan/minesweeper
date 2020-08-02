@@ -27,10 +27,6 @@ export default function App() {
   }, [isAuthenticated])
 
   useEffect(() => {
-    console.log('accessToken', accessToken)
-  }, [accessToken])
-
-  useEffect(() => {
     setApiClient(
       accessToken
         ? ApiClient({ url: process.env.REACT_APP_API_URL || 'http://localhost:8000', accessToken })
