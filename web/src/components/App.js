@@ -13,7 +13,7 @@ export default function App() {
   const [background, setBackground] = useState(0)
   const [cheatSeeMines, setCheatSeeMines] = useState(false)
   const [version, setVersion] = useState('client')
-  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0()
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0()
   const [accessToken, setAccessToken] = useState('')
   const [apiClient, setApiClient] = useState(null)
 
