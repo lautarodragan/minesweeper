@@ -18,7 +18,8 @@ export const Router = ({ business }: Config) => {
   })
 
   router.get('/games', (ctx, next) => {
-    const games = business.getGames()
+    const { user } = ctx.state
+    const games = business.getGames(user.sub)
     ctx.status = 200
     ctx.body = games
   })
@@ -37,9 +38,13 @@ export const Router = ({ business }: Config) => {
 
   router.post('/games', (ctx, next) => {
     const game = ctx.request.body
+    const { user } = ctx.state
 
     try {
-      business.createGame(game)
+      business.createGame({
+        ...game,
+        userId: user.sub,
+      })
       ctx.status = 201
     } catch (error) {
       // Assume error is always Used ID. We'll decouple this later.
@@ -51,11 +56,12 @@ export const Router = ({ business }: Config) => {
   router.put('/games/:gameId/cells/:cellId', (ctx, next) => {
     const { gameId, cellId } = ctx.params
     const { value } = ctx.request.body
+    const { user } = ctx.state
 
     const [x, y] = cellId.split(',')
 
     try {
-      business.setGameCell(gameId, parseInt(x), parseInt(y), value)
+      business.setGameCell(user.sub, gameId, parseInt(x), parseInt(y), value)
       ctx.status = 200
     } catch (error) {
       // Assume error is always 404 Game Not Found. We'll decouple this later.

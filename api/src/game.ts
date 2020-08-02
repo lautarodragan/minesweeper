@@ -1,6 +1,7 @@
 import { Coord } from '@taros-minesweeper/lib'
 
 export interface Game {
+  readonly userId: string
   readonly id: string
   readonly width: number
   readonly height: number
