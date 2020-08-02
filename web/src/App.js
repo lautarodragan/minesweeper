@@ -5,6 +5,7 @@ import './App.css'
 
 import { ClientMinesweeper } from './components/ClientMinesweeper'
 import { Nav } from './components/Nav'
+import { ServerMinesweeper } from './components/ServerMinesweeper'
 
 export default function App() {
   const [background, setBackground] = useState(0)
@@ -40,9 +41,11 @@ export default function App() {
     <div className="container" onClick={onContainerClick}>
       <section className="game">
         <Nav version={version} onVersion={setVersion}/>
-        <ClientMinesweeper
-          cheatSeeMines={cheatSeeMines}
-        />
+        {
+          version === 'client'
+            ? <ClientMinesweeper cheatSeeMines={cheatSeeMines} />
+            : <ServerMinesweeper accessToken={accessToken} cheatSeeMines={cheatSeeMines} />
+        }
         <Toolbar cheatSeeMines={cheatSeeMines} onCheatSeeMines={setCheatSeeMines} />
       </section>
 
