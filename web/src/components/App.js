@@ -33,7 +33,7 @@ export default function App() {
   useEffect(() => {
     setApiClient(
       accessToken
-        ? ApiClient({ apiUrl: process.env.REACT_APP_API_URL || 'http://localhost:8000', accessToken })
+        ? ApiClient({ url: process.env.REACT_APP_API_URL || 'http://localhost:8000', accessToken })
         : null
     )
   }, [accessToken])

@@ -1,4 +1,4 @@
-export const ApiClient = ({ url = 'http://localhost:8000', accessToken }) => {
+export const ApiClient = ({ url, accessToken }) => {
   console.log('ApiClient', { url, accessToken })
 
   const authorizationHeaders = { Authorization: `Bearer ${accessToken}` }
