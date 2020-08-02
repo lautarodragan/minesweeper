@@ -1,0 +1,9 @@
+ul.games {
+  margin: 0;
+  background-color: #c0c0c0;
+  list-style: none;
+}
+
+ul.games li {
+  padding: 8px;
+}

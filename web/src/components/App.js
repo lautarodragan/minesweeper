@@ -8,6 +8,7 @@ import { ApiClient } from '../ApiClient'
 import { ClientMinesweeper } from './ClientMinesweeper'
 import { Nav } from './Nav'
 import { ServerMinesweeper } from './ServerMinesweeper'
+import { Games } from './Games'
 
 export default function App() {
   const [background, setBackground] = useState(0)
@@ -16,6 +17,7 @@ export default function App() {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0()
   const [accessToken, setAccessToken] = useState('')
   const [apiClient, setApiClient] = useState(null)
+  const [isInGameList, setIsInGameList] = useState(false)
 
   useEffect(() => {
     switchBackground()
@@ -47,8 +49,12 @@ export default function App() {
   return (
     <div className="container" onClick={onContainerClick}>
       <section className="game">
-        <Nav version={version} onVersion={setVersion} />
-        <Minesweeper version={version} apiClient={apiClient} cheatSeeMines={cheatSeeMines} />
+        <Nav version={version} onVersion={setVersion} onMyGames={() => setIsInGameList(!isInGameList)} />
+        {
+          isInGameList
+            ? <Games apiClient={apiClient} />
+            : <Minesweeper version={version} apiClient={apiClient} cheatSeeMines={cheatSeeMines} />
+        }
         <Toolbar cheatSeeMines={cheatSeeMines} onCheatSeeMines={setCheatSeeMines} />
       </section>
 

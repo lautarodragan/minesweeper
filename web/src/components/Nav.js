@@ -3,15 +3,22 @@ import React from 'react'
 
 import './Nav.css'
 
-export const Nav = ({ version, onVersion }) => {
+export const Nav = ({ version, onVersion, onMyGames }) => {
   const { isAuthenticated, user } = useAuth0()
 
   return (
     <nav>
       { !isAuthenticated && <LoginButton /> }
       { isAuthenticated && <Profile user={user} /> }
-      <span className={ version === 'client' ? 'active' : ''} onClick={() => onVersion('client')} >Play Client-Only Version</span>
-      <span className={ version === 'server' ? 'active' : ''} onClick={() => onVersion('server')} >Play Server Version</span>
+      <div>
+        <div>
+          <span className={ version === 'client' ? 'active' : ''} onClick={() => onVersion('client')} >Play Client-Only Version</span>
+          <span className={ version === 'server' ? 'active' : ''} onClick={() => onVersion('server')} >Play Server Version</span>
+        </div>
+        <div>
+          <span onClick={() => onMyGames()} >My Games</span>
+        </div>
+      </div>
     </nav>
   )
 }
