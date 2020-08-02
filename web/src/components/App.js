@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react'
 
 import './App.css'
 
+import { ApiClient } from '../ApiClient'
+
 import { ClientMinesweeper } from './ClientMinesweeper'
 import { Nav } from './Nav'
 import { ServerMinesweeper } from './ServerMinesweeper'
@@ -13,6 +15,7 @@ export default function App() {
   const [version, setVersion] = useState('client')
   const { isAuthenticated, user, getAccessTokenSilently } = useAuth0()
   const [accessToken, setAccessToken] = useState('')
+  const [apiClient, setApiClient] = useState(null)
 
   useEffect(() => {
     switchBackground()
@@ -25,6 +28,14 @@ export default function App() {
 
   useEffect(() => {
     console.log('accessToken', accessToken)
+  }, [accessToken])
+
+  useEffect(() => {
+    setApiClient(
+      accessToken
+        ? ApiClient({ apiUrl: process.env.REACT_APP_API_URL || 'http://localhost:8000', accessToken })
+        : null
+    )
   }, [accessToken])
 
   const switchBackground = () => {
@@ -44,7 +55,7 @@ export default function App() {
         {
           version === 'client'
             ? <ClientMinesweeper cheatSeeMines={cheatSeeMines} />
-            : <ServerMinesweeper accessToken={accessToken} cheatSeeMines={cheatSeeMines} />
+            : <ServerMinesweeper apiClient={apiClient} cheatSeeMines={cheatSeeMines} />
         }
         <Toolbar cheatSeeMines={cheatSeeMines} onCheatSeeMines={setCheatSeeMines} />
       </section>

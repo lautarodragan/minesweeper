@@ -9,39 +9,7 @@ import { v4 as uuid } from 'uuid'
 
 import { Minesweeper } from './Minesweeper'
 
-const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000'
-
-console.log({ apiUrl })
-
-async function createGame(game, accessToken) {
-  await fetch(`${apiUrl}/games`, {
-    method: 'post',
-    body: JSON.stringify(game),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  })
-  const gameResponse = await fetch(`${apiUrl}/games/${game.id}`, { headers: { Authorization: `Bearer ${accessToken}` }})
-  return gameResponse.json()
-}
-
-async function setCell(gameId, x, y, value, accessToken) {
-  await fetch(`${apiUrl}/games/${gameId}/cells/${x},${y}`, {
-    method: 'put',
-    body: JSON.stringify({
-      value,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
-    },
-  })
-  const gameResponse = await fetch(`${apiUrl}/games/${gameId}`, { headers: { Authorization: `Bearer ${accessToken}` } })
-  return gameResponse.json()
-}
-
-export const ServerMinesweeper = ({ accessToken, cheatSeeMines }) => {
+export const ServerMinesweeper = ({ apiClient, cheatSeeMines }) => {
   const [boardWidth, setBoardWidth] = useState(16)
   const [boardHeight, setBoardHeight] = useState(16)
   const [boardMineCount, setBoardMineCount] = useState(40)
@@ -84,12 +52,12 @@ export const ServerMinesweeper = ({ accessToken, cheatSeeMines }) => {
     if (value === CellValue.UnknownClear || value === CellValue.UnknownMine) {
       if (startTime === null)
         startTimeTracker()
-      setCell(game.id, x, y, CellValue.KnownClear, accessToken).then(setGame)
+      apiClient.setCellAndGet(game.id, x, y, CellValue.KnownClear).then(setGame)
     }
   }
 
   const onSweep = (x, y, value) => {
-    setCell(game.id, x, y, CellValue.KnownClear, accessToken).then(setGame)
+    apiClient.setCellAndGet(game.id, x, y, CellValue.KnownClear).then(setGame)
   }
 
   const onFlag = (x, y) => (event) => {
@@ -101,19 +69,19 @@ export const ServerMinesweeper = ({ accessToken, cheatSeeMines }) => {
     if (!isUnknown(game.board[y][x]))
       return
 
-    setCell(game.id, x, y, CellValue.UnknownMineFlag, accessToken).then(setGame)
+    apiClient.setCellAndGet(game.id, x, y, CellValue.UnknownMineFlag).then(setGame)
   }
 
   const onReset = () => {
     stopTimeTracker()
     setStartTime(null)
     setGameDuration(null)
-    createGame({
+    apiClient.createGameAndGet({
       id: uuid(),
       width: boardWidth,
       height: boardHeight,
       mineCount: boardMineCount,
-    }, accessToken).then(setGame)
+    }).then(setGame)
   }
 
   return (
