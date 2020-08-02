@@ -6,8 +6,10 @@ export const Games = ({ apiClient }) => {
   const [games, setGames] = useState([])
 
   useEffect(() => {
+    if (!apiClient)
+      return
     apiClient.getGames().then(setGames)
-  }, [])
+  }, [apiClient])
 
   return (
     <ul className="games">
