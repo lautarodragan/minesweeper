@@ -1,5 +1,10 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import React, { useState, useEffect } from 'react'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from 'react-router-dom'
 
 import './App.css'
 
@@ -13,11 +18,9 @@ import { Games } from './Games'
 export default function App() {
   const [background, setBackground] = useState(0)
   const [cheatSeeMines, setCheatSeeMines] = useState(false)
-  const [version, setVersion] = useState('client')
   const { isAuthenticated, getAccessTokenSilently } = useAuth0()
   const [accessToken, setAccessToken] = useState('')
   const [apiClient, setApiClient] = useState(null)
-  const [isInGameList, setIsInGameList] = useState(false)
 
   useEffect(() => {
     switchBackground()
@@ -47,23 +50,36 @@ export default function App() {
   }
 
   return (
-    <div className="container" onClick={onContainerClick}>
-      <section className="game">
-        <Nav version={version} onVersion={setVersion} onMyGames={() => setIsInGameList(!isInGameList)} />
-        {
-          isInGameList
-            ? <Games apiClient={apiClient} />
-            : <Minesweeper version={version} apiClient={apiClient} cheatSeeMines={cheatSeeMines} />
-        }
-        <Toolbar cheatSeeMines={cheatSeeMines} onCheatSeeMines={setCheatSeeMines} />
-      </section>
+    <Router>
+      <div className="container" onClick={onContainerClick}>
+        <section className="game">
+          <Nav/>
+          <Switch>
+            <Route path="/games">
+              <Games apiClient={apiClient} />
+            </Route>
+            <Route path="/play/offline">
+              <ClientMinesweeper cheatSeeMines={cheatSeeMines} />
+            </Route>
+            <Route path="/play/online">
+              <ServerMinesweeper apiClient={apiClient} cheatSeeMines={cheatSeeMines} />
+            </Route>
+            <Route>
+              <section className="home">
+                Taro's Minesweeper! You can play offline and online!
+              </section>
+            </Route>
+          </Switch>
+          <Toolbar cheatSeeMines={cheatSeeMines} onCheatSeeMines={setCheatSeeMines} />
+        </section>
 
-      <style>{`
-        body {
-          background-image: url(/wallpapers/${background}.png);
-        }
-      `}</style>
-    </div>
+        <style>{`
+          body {
+            background-image: url(/wallpapers/${background}.png);
+          }
+        `}</style>
+      </div>
+    </Router>
   )
 }
 
@@ -75,8 +91,3 @@ const Toolbar = ({ cheatSeeMines, onCheatSeeMines }) => (
     </div>
   </section>
 )
-
-const Minesweeper = ({ version, apiClient, cheatSeeMines }) =>
-  version === 'client'
-    ? <ClientMinesweeper cheatSeeMines={cheatSeeMines} />
-    : <ServerMinesweeper apiClient={apiClient} cheatSeeMines={cheatSeeMines} />

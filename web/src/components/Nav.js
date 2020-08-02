@@ -1,9 +1,10 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import './Nav.css'
 
-export const Nav = ({ version, onVersion, onMyGames }) => {
+export const Nav = () => {
   const { isAuthenticated, user } = useAuth0()
 
   return (
@@ -12,11 +13,11 @@ export const Nav = ({ version, onVersion, onMyGames }) => {
       { isAuthenticated && <Profile user={user} /> }
       <div>
         <div>
-          <span className={ version === 'client' ? 'active' : ''} onClick={() => onVersion('client')} >Play Client-Only Version</span>
-          <span className={ version === 'server' ? 'active' : ''} onClick={() => onVersion('server')} >Play Server Version</span>
+          <Link to="/play/offline" >Play Offline</Link>
+          <Link to="/play/online" >Play Online</Link>
         </div>
         <div>
-          <span onClick={() => onMyGames()} >My Games</span>
+          <Link to="/games">My Games</Link>
         </div>
       </div>
     </nav>
