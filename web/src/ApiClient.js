@@ -52,6 +52,7 @@ export const ApiClient = ({ url, accessToken }) => {
     createGame,
     createGameAndGet,
     getGame,
+    getGames,
     setCell,
     setCellAndGet,
   }

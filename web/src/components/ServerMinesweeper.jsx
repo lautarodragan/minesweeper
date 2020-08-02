@@ -21,6 +21,7 @@ export const ServerMinesweeper = ({ apiClient, cheatSeeMines }) => {
 
   useEffect(() => {
     onReset()
+    apiClient.getGames().then(console.log)
   }, [])
 
   useEffect(() => {
