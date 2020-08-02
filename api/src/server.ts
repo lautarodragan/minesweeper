@@ -35,6 +35,11 @@ Wz+gqf7BmFNGwkIuySKvQrI=
 -----END CERTIFICATE-----
 `
 
+const logRequests = (ctx: any, next: any) => {
+  console.log(ctx.req.method, ctx.req.url, ctx.state.user.sub)
+  next()
+}
+
 export const Server = ({ port, router }: Config): Server => {
   const jwtCheck = jwt({
     secret,
@@ -47,6 +52,7 @@ export const Server = ({ port, router }: Config): Server => {
     .use(cors())
     .use(jwtCheck)
     .use(KoaBodyparser())
+    .use(logRequests)
     .use(router.routes())
     .use(router.allowedMethods())
 
