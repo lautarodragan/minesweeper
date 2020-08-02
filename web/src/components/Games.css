@@ -2,6 +2,8 @@ ul.games {
   margin: 0;
   background-color: #c0c0c0;
   list-style: none;
+  max-height: 50vh;
+  overflow: auto;
 }
 
 ul.games li {
