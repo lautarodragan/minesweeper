@@ -38,8 +38,8 @@ export const Dao = ({ collection }: DaoConfig): Dao => {
     await collection.updateOne({ id }, { $set: { win: true, endDate: new Date().toISOString() } })
   }
 
-  const setLost = async (id: string, losePosition: Coord) => {
-    await collection.updateOne({ id }, { $set: { losePosition, lost: true, endDate: new Date().toISOString() } })
+  const setLost = async (id: string, lostPosition: Coord) => {
+    await collection.updateOne({ id }, { $set: { lostPosition, lost: true, endDate: new Date().toISOString() } })
   }
 
   return {
