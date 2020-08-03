@@ -5,10 +5,10 @@ Solution to the Amazon challenge.
 Deployed and playable at https://minesweeper.tarokun.io/.
 
 The game has two modes:
-- Offline mode: runs completely in the browser. It's way faster, but has no persistence and can be cheated easily. If I added a highscore screen, offline games wouldn't count.
-- Online mode: requires signing up. Uses the API. State is persisted on every action, browser can be safely closed. Can go back and pick up any past game.
+- 💾 Offline mode: runs completely in the browser. It's way faster, but has no persistence and can be cheated easily. If I added a highscore screen, offline games wouldn't count.
+- 🌎 Online mode: requires signing up. Uses the API. State is persisted on every action, browser can be safely closed. Can go back and pick up any past game.
 
-The online mode runs rather slowly due to using the free tier of MongoDB Atlas and Heroku, and not having any optimizations whatsoever.  
+The online mode runs rather slowly due to using the free tier of MongoDB Atlas and Heroku. 
 
 ## How to Play
 
