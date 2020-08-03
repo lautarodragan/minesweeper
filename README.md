@@ -1,12 +1,74 @@
 # Minesweeper
 
-Solution to the Amazon challenge by Deviget.
+Solution to the Amazon challenge.
+
+Deployed and playable at https://minesweeper.tarokun.io/.
+
+The game has two modes:
+- Offline mode: runs completely in the browser. It's way faster, but has no persistence and can be cheated easily. If I added a highscore screen, wouldn't count.
+- Online mode: requires signing up. Uses the API. State is persisted on every action, browser can be safely closed. Can go back and pick up any past game.
+
+The online mode runs rather slowly due to using the free tier of MongoDB Atlas and Heroku, and not having any optimizations whatsoever.  
+
+## How to Play
+
+The goal of the game is to find all of the mines in the board... without triggering any!
+
+You have three tools at your disposal to achieve this goal:
+
+### Reveal
+
+Left-click on unknown tiles to reveal them. 
+
+If the tile was clear, meaning it had no mine in it, it'll be marked so. This means one step closer to winning.
+
+💣  Be careful, though! If the tile had a mine in it, it'll be triggered. This means game-over.
+
+### 🏘️ Neighbours 
+
+Revealed clear tiles may display a number in them. This is the number of mines immediately surrounding said tile. Use this information to your advantage.
+
+### Flags
+
+Right-click on an unrevealed tile you suspect has a mine in it to flag it.
+
+Flagged mines can't be left-clicked, which prevents accidentally triggering a mine, and enable _sweeps_.
+
+### Sweep
+
+Clicking on a tile that has a number in it will trigger a _sweep_.
+
+A sweep works this way:
+
+If you have flagged every surrounding mine correctly, the sweep will automatically reveal all clear tiles surrounding the tile you clicked on.
+
+💣 But if you incorrectly left an unrevealed mine unflagged and flagged a clear tile instead, the mine will be triggered and it's game over.
+
+### Winning
+
+The game is won when the only unrevealed tiles are mines and they are all flagged. 
+
+## Implementation
+
+The game runs on the free tiers of Netlify, Heroku, MongoDB Atlas and Auth0.
+
+It consists of a ReactJS SPA, a NodeJS API and a stand-alone library.
+
+The library has all the abstract Minesweeper logic, and is used both in the frontend, for offline games, and in the backend. It has no run-time dependencies, is framework-agnostic and all exported functions are pure. It's written in TypeScript and exports type definitions along with the compiled JavaScript. It's published to npm at https://www.npmjs.com/@taros-minesweeper/lib. 
+
+The API is very straight-forward and has a very simple layered architecture. All endpoints require authentication, which is expected in the form of a JWT signed with a private key which matches the Signing Certificate that's hard-coded in the Server file of the backend. There are only four exposed endpoints: `GET /games`, `GET /games/:id`, `POST /games` and `PUT /games/:gameId/cells/:cellId`. The first three endpoints are exactly what you imagine when you read the http verb and url. The latter, on the other hand, is rather unintuitive, an unfortunate consequence of forcing the REST philosophy unto the game mechanics, which will probably change.
+
+The frontend uses `create-react-app`. It allows playing in offline mode, which requires no sign up, not even an internet connection after the page is loaded, but does not persist any state; and online mode, which delegates all logic to the API.
+
+## Plan
+
+Note: this is the plan I came up with _before_ I started implementing anything. I've left this section as is so the plan can be contrasted with the results.
 
 The challenge only requires an API, but I used to love minesweeper as a child, before I had internet, and this seems like a really fun challenge, so I decided to implement a frontend for it.
 
 I'm not spending a lot of time in code quality or aesthetics in the frontend though, as it's just an extra and I'm pretty short on time. I decided to go with next due to the simplicity of the framework, and to skip TypeScript because the complexity is going to stay pretty low and I'm going to be working on my own on it. 🤠 Yee-haw!
 
-## Plan
+UPDATE: wound up adding TypeScript and some degree of architecture in the end... and moved away from Next to create-react-app due to the added complexity of SSR (and Next being tightly coupled to it).
 
 1. Implement everything in the frontend
 1. Add backend
