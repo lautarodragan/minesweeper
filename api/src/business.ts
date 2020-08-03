@@ -30,8 +30,6 @@ export const Business = ({ dao }: Config): Business => {
   const getGameById = async (userId: string, id: string) => {
     const game = await dao.getGameById(id)
 
-    console.log('getGameById', userId, id, game)
-
     if (!game) {
       throw new Error() // TODO: NotFoundError
     }
@@ -83,20 +81,16 @@ export const Business = ({ dao }: Config): Business => {
         const lost = cellValue === CellValue.UnknownMine
 
         if (lost) {
-          game.lost = true
-          game.lostPosition = { x, y }
-          game.endDate = new Date().toISOString()
+          await dao.setLost(game.id, { x, y })
           return
         }
 
         const newBoard = reveal(game.board, x, y)
 
-        if (isWon(newBoard)) {
-          game.won = true
-          game.endDate = new Date().toISOString()
-        }
+        if (isWon(newBoard))
+          await dao.setWon(game.id)
 
-        game.board = newBoard
+        await dao.setBoard(game.id, newBoard)
       } else if (cellValue === CellValue.KnownClear) {
         const surroundingMineCount = getSurroundingMineCount(game.board, x, y)
         const surroundingFlagCount = getSurroundingFlagCount(game.board, x, y)
@@ -104,16 +98,16 @@ export const Business = ({ dao }: Config): Business => {
         if (surroundingMineCount === surroundingFlagCount) {
           const { losePosition, board: newBoard } = sweep(game.board, x, y)
           if (losePosition) {
-            game.lost = true
-            game.lostPosition = losePosition
-          } else {
-            game.board = newBoard
+            await dao.setLost(game.id, losePosition)
+          } else if (newBoard) {
+            await dao.setBoard(game.id, newBoard)
           }
         }
 
       }
     } else if (value === CellValue.UnknownMineFlag) {
       game.board[y][x] = toggleFlag(cellValue)
+      await dao.setBoard(game.id, game.board)
     }
 
   }
