@@ -1,15 +1,31 @@
+import { Board, Coord } from '@taros-minesweeper/lib'
+
+export interface Game {
+  readonly userId: string
+  readonly id: string
+  readonly creationDate: string
+  readonly endDate?: string
+  readonly width: number
+  readonly height: number
+  readonly mineCount: number
+  readonly board: Board
+  readonly lost: boolean
+  readonly lostPosition?: Coord
+  readonly won: boolean
+}
+
 interface ApiClientConfig {
   readonly url: string
   readonly accessToken: string
 }
 
 export interface ApiClient {
-  readonly createGame: (game: any) => Promise<void>
-  readonly createGameAndGet: (game: any) => Promise<any>
-  readonly getGame: (id: string) => Promise<any>
-  readonly getGames: () => Promise<readonly any[]>
+  readonly createGame: (game: Game) => Promise<void>
+  readonly createGameAndGet: (game: Game) => Promise<Game>
+  readonly getGame: (id: string) => Promise<Game>
+  readonly getGames: () => Promise<readonly Omit<Game, 'board'>[]>
   readonly setCell: (gameId: string, x: number, y: number, value: number) => Promise<void>
-  readonly setCellAndGet: (gameId: string, x: number, y: number, value: number) => Promise<any>
+  readonly setCellAndGet: (gameId: string, x: number, y: number, value: number) => Promise<Game>
 }
 
 export const ApiClient = ({ url, accessToken }: ApiClientConfig): ApiClient => {

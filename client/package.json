@@ -13,5 +13,8 @@
   "license": "ISC",
   "devDependencies": {
     "typescript": "3.9.7"
+  },
+  "dependencies": {
+    "@taros-minesweeper/lib": "1.0.1"
   }
 }
