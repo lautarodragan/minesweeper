@@ -16,7 +16,7 @@ The goal of the game is to find all of the mines in the board... without trigger
 
 You have three tools at your disposal to achieve this goal:
 
-### Reveal
+### 👆 Reveal
 
 Left-click on unknown tiles to reveal them. 
 
@@ -34,7 +34,7 @@ Right-click on an unrevealed tile you suspect has a mine in it to flag it.
 
 Flagged mines can't be left-clicked, which prevents accidentally triggering a mine, and enable _sweeps_.
 
-### Sweep
+### 🧙 Sweep
 
 Clicking on a tile that has a number in it will trigger a _sweep_.
 
@@ -44,7 +44,7 @@ If you have flagged every surrounding mine correctly, the sweep will automatical
 
 💣 But if you incorrectly left an unrevealed mine unflagged and flagged a clear tile instead, the mine will be triggered and it's game over.
 
-### Winning
+### 🏆 Winning
 
 The game is won when the only unrevealed tiles are mines and they are all flagged. 
 
