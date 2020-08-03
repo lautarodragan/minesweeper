@@ -78,6 +78,7 @@ export const Business = ({ dao }: Config): Business => {
     const cellValue = game.board[y][x]
     if (value === CellValue.KnownClear) {
       if (cellValue === CellValue.UnknownClear || cellValue === CellValue.UnknownMine) {
+        // Reveal
         const lost = cellValue === CellValue.UnknownMine
 
         if (lost) {
@@ -92,6 +93,7 @@ export const Business = ({ dao }: Config): Business => {
 
         await dao.setBoard(game.id, newBoard)
       } else if (cellValue === CellValue.KnownClear) {
+        // Sweep
         const surroundingMineCount = getSurroundingMineCount(game.board, x, y)
         const surroundingFlagCount = getSurroundingFlagCount(game.board, x, y)
 
@@ -106,6 +108,7 @@ export const Business = ({ dao }: Config): Business => {
 
       }
     } else if (value === CellValue.UnknownMineFlag) {
+      // Toggle Flag
       game.board[y][x] = toggleFlag(cellValue)
       await dao.setBoard(game.id, game.board)
     }
