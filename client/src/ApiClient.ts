@@ -42,7 +42,8 @@ export const ApiClient = ({ url, accessToken }: ApiClientConfig): ApiClient => {
         ...contentTypeJsonHeaders,
       },
     })
-    if (response.headers.get('Content-Type')?.startsWith('application/json'))
+    const contentType = response.headers.get('Content-Type')
+    if (contentType && contentType.startsWith('application/json'))
       return response.json()
     else
       return response.text()
