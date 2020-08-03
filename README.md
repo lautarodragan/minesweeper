@@ -52,18 +52,19 @@ The game is won when the only unrevealed tiles left are all mines and they are a
 
 The game runs on the free tiers of Netlify, Heroku, MongoDB Atlas and Auth0.
 
-It consists of a ReactJS SPA, a NodeJS API and a stand-alone library.
+It consists of a ReactJS SPA, a NodeJS API, an API Client and a stand-alone library.
 
 The library has all the abstract Minesweeper logic, and is used both in the frontend, for offline games, and in the backend. It has no run-time dependencies, is framework-agnostic and all exported functions are pure. It's written in TypeScript and exports type definitions along with the compiled JavaScript. It's published to npm at https://www.npmjs.com/@taros-minesweeper/lib. 
 
 The API is very straight-forward and has a very simple layered architecture. All endpoints require authentication, which is expected in the form of a JWT signed with a private key which matches the Signing Certificate that's hard-coded in the Server file of the backend. There are only four exposed endpoints: `GET /games`, `GET /games/:id`, `POST /games` and `PUT /games/:gameId/cells/:cellId`. The first three endpoints are exactly what you imagine when you read the http verb and url. The latter, on the other hand, is rather unintuitive, an unfortunate consequence of forcing the REST philosophy unto the game mechanics, which will probably change.
-
 
 > ℹ️ The API reads the entire game state from the DB, updates it and writes it back to the DB on every request. This approach is [standard](https://12factor.net/processes) and works really well for most APIs, which usually are small-ish CRUD applications that need to support random restarts and scale horizontally. 
 > 
 > For online multiplayer games, though, it doesn't scale well. MMO servers typically keep state in memory and persist it with different strategies (such as updating the DB when the user logs out). This is why MMOs have different "worlds" players can log into, with a rather low concurrently-logged-in player cap.
 >
 > See [Optimization: Keep "Open" Games In Memory](https://github.com/lautarodragan/minesweeper/issues/9). 
+
+The API Client, published at https://www.npmjs.com/@taros-minesweeper/client, is very straightforward: it exports a single factory function `ApiClient` and a `Game` interface.
 
 The frontend uses `create-react-app`. It allows playing in offline mode, which requires no sign up, not even an internet connection after the page is loaded, but does not persist any state; and online mode, which delegates all logic to the API.
 
@@ -73,13 +74,13 @@ There are a few improvements left to be done. Please check out the [issues](/iss
 
 ## Plan
 
-> Note: this is the plan I came up with _before_ I started implementing anything. I've left this section as is so the plan can be contrasted with the results.
+> ⚠️ Note: this is the plan I came up with _before_ I started implementing anything. I've left this section as is so the plan can be contrasted with the results.
 
 The challenge only requires an API, but I used to love minesweeper as a child, before I had internet, and this seems like a really fun challenge, so I decided to implement a frontend for it.
 
 I'm not spending a lot of time in code quality or aesthetics in the frontend though, as it's just an extra and I'm pretty short on time. I decided to go with next due to the simplicity of the framework, and to skip TypeScript because the complexity is going to stay pretty low and I'm going to be working on my own on it. 🤠 Yee-haw!
 
-> UPDATE: wound up adding TypeScript and some degree of architecture in the end... and moved away from Next to create-react-app due to the added complexity of SSR (and Next being tightly coupled to it).
+> ❗ UPDATE: wound up adding TypeScript and some degree of architecture in the end... and moved away from Next to create-react-app due to the added complexity of SSR (and Next being tightly coupled to it).
 
 1. Implement everything in the frontend
 1. Add backend
