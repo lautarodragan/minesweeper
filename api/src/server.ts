@@ -35,9 +35,9 @@ Wz+gqf7BmFNGwkIuySKvQrI=
 -----END CERTIFICATE-----
 `
 
-const logRequests = (ctx: any, next: any) => {
+const logRequests = async (ctx: any, next: any) => {
   console.log(ctx.req.method, ctx.req.url, ctx.state.user.sub)
-  next()
+  await next()
 }
 
 export const Server = ({ port, router }: Config): Server => {
