@@ -65,7 +65,8 @@ export default function App() {
             </Route>
             <Route>
               <section className="home">
-                Taro's Minesweeper! You can play offline and online!
+                <p>Taro's Minesweeper! You can play offline and online!</p>
+                <p>Try clicking on the background.</p>
               </section>
             </Route>
           </Switch>
