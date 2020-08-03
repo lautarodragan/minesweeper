@@ -58,7 +58,18 @@ The library has all the abstract Minesweeper logic, and is used both in the fron
 
 The API is very straight-forward and has a very simple layered architecture. All endpoints require authentication, which is expected in the form of a JWT signed with a private key which matches the Signing Certificate that's hard-coded in the Server file of the backend. There are only four exposed endpoints: `GET /games`, `GET /games/:id`, `POST /games` and `PUT /games/:gameId/cells/:cellId`. The first three endpoints are exactly what you imagine when you read the http verb and url. The latter, on the other hand, is rather unintuitive, an unfortunate consequence of forcing the REST philosophy unto the game mechanics, which will probably change.
 
+
+> ℹ️ The API reads the entire game state from the DB, updates it and writes it back to the DB on every request. This approach is [standard](https://12factor.net/processes) and works really well for most APIs, which usually are small-ish CRUD applications that need to support random restarts and scale horizontally. 
+> 
+> For online multiplayer games, though, it doesn't scale well. MMO servers typically keep state in memory and persist it with different strategies (such as updating the DB when the user logs out). This is why MMOs have different "worlds" players can log into, with a rather low concurrently-logged-in player cap.
+>
+> See [Optimization: Keep "Open" Games In Memory](https://github.com/lautarodragan/minesweeper/issues/9). 
+
 The frontend uses `create-react-app`. It allows playing in offline mode, which requires no sign up, not even an internet connection after the page is loaded, but does not persist any state; and online mode, which delegates all logic to the API.
+
+## Pending Features
+
+There are a few improvements left to be done. Please check out the [issues](/issues).
 
 ## Plan
 
