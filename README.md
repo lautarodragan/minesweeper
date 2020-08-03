@@ -62,13 +62,13 @@ The frontend uses `create-react-app`. It allows playing in offline mode, which r
 
 ## Plan
 
-Note: this is the plan I came up with _before_ I started implementing anything. I've left this section as is so the plan can be contrasted with the results.
+> Note: this is the plan I came up with _before_ I started implementing anything. I've left this section as is so the plan can be contrasted with the results.
 
 The challenge only requires an API, but I used to love minesweeper as a child, before I had internet, and this seems like a really fun challenge, so I decided to implement a frontend for it.
 
 I'm not spending a lot of time in code quality or aesthetics in the frontend though, as it's just an extra and I'm pretty short on time. I decided to go with next due to the simplicity of the framework, and to skip TypeScript because the complexity is going to stay pretty low and I'm going to be working on my own on it. 🤠 Yee-haw!
 
-UPDATE: wound up adding TypeScript and some degree of architecture in the end... and moved away from Next to create-react-app due to the added complexity of SSR (and Next being tightly coupled to it).
+> UPDATE: wound up adding TypeScript and some degree of architecture in the end... and moved away from Next to create-react-app due to the added complexity of SSR (and Next being tightly coupled to it).
 
 1. Implement everything in the frontend
 1. Add backend
