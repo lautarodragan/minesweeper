@@ -46,7 +46,7 @@ If you have flagged every surrounding mine correctly, the sweep will automatical
 
 ### 🏆 Winning
 
-The game is won when the only unrevealed tiles are mines and they are all flagged. 
+The game is won when the only unrevealed tiles left are all mines and they are all flagged. 
 
 ## Implementation
 
