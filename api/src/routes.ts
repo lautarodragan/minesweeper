@@ -17,16 +17,17 @@ export const Router = ({ business }: Config) => {
     }
   })
 
-  router.get('/games', (ctx, next) => {
+  router.get('/games', async (ctx, next) => {
     const { user } = ctx.state
-    const games = business.getGames(user.sub)
+    const games = await business.getGames(user.sub)
     ctx.status = 200
     ctx.body = games
   })
 
-  router.get('/games/:id', (ctx, next) => {
+  router.get('/games/:id', async (ctx, next) => {
+    const { user } = ctx.state
     const { id } = ctx.params
-    const game = business.getGameById(id)
+    const game = await business.getGameById(user.sub, id)
 
     if (game) {
       ctx.status = 200
@@ -36,12 +37,12 @@ export const Router = ({ business }: Config) => {
     }
   })
 
-  router.post('/games', (ctx, next) => {
+  router.post('/games', async (ctx, next) => {
     const game = ctx.request.body
     const { user } = ctx.state
 
     try {
-      business.createGame({
+      await business.createGame({
         ...game,
         userId: user.sub,
       })
@@ -53,7 +54,7 @@ export const Router = ({ business }: Config) => {
     }
   })
 
-  router.put('/games/:gameId/cells/:cellId', (ctx, next) => {
+  router.put('/games/:gameId/cells/:cellId', async (ctx, next) => {
     const { gameId, cellId } = ctx.params
     const { value } = ctx.request.body
     const { user } = ctx.state
@@ -61,7 +62,7 @@ export const Router = ({ business }: Config) => {
     const [x, y] = cellId.split(',')
 
     try {
-      business.setGameCell(user.sub, gameId, parseInt(x), parseInt(y), value)
+      await business.setGameCell(user.sub, gameId, parseInt(x), parseInt(y), value)
       ctx.status = 200
     } catch (error) {
       // Assume error is always 404 Game Not Found. We'll decouple this later.

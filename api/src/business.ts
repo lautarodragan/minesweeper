@@ -1,37 +1,54 @@
-import { makeBoard, CellValue, toggleFlag, sweep, getSurroundingFlagCount, getSurroundingMineCount } from '@taros-minesweeper/lib'
+import {
+  makeBoard,
+  CellValue,
+  toggleFlag,
+  sweep,
+  getSurroundingFlagCount,
+  getSurroundingMineCount,
+  reveal,
+  isWon,
+} from '@taros-minesweeper/lib'
 
 import { Game } from './game'
-import { reveal, isWon } from '@taros-minesweeper/lib/dist'
+import { Dao } from './dao'
 
 interface Config {
-  readonly games: Game[]
+  readonly dao: Dao
 }
 
 export interface Business {
-  readonly getGames: (userId: string) => readonly Omit<Game, 'board'>[]
-  readonly getGameById: (id: string) => Game | undefined
-  readonly createGame: (game: Game) => void
-  readonly setGameCell: (userId: string, gameId: string, x: number, y: number, value: CellValue) => void
+  readonly getGames: (userId: string) => Promise<readonly Omit<Game, 'board'>[]>
+  readonly getGameById: (userId: string, id: string) => Promise<Game | undefined>
+  readonly createGame: (game: Game) => Promise<void>
+  readonly setGameCell: (userId: string, gameId: string, x: number, y: number, value: CellValue) => Promise<void>
 }
 
-export const Business = ({ games }: Config): Business => {
+export const Business = ({ dao }: Config): Business => {
 
-  const getGames = (userId: string) =>
-    games
-      .filter(game => game.userId === userId)
-      .sort((a: Game, b: Game) => a.creationDate > b.creationDate ? -1 : a.creationDate < b.creationDate ? 1 : 0)
-      .map(({ board, ...game }) => ({ ...game }))
+  const getGames = (userId: string) => dao.getGames(userId)
 
-  const getGameById = (id: string) => {
-    // TODO: UnauthorizedError
-    const game = games.find(game => game.id === id)
+  const getGameById = async (userId: string, id: string) => {
+    const game = await dao.getGameById(id)
+
+    console.log('getGameById', userId, id, game)
+
+    if (!game) {
+      throw new Error() // TODO: NotFoundError
+    }
+
+    if (game.userId !== userId) {
+      throw new Error() // TODO: UnauthorizedError
+    }
+
     return game
   }
 
-  const createGame = (game: Game) => {
+  const createGame = async (game: Game) => {
     const { userId, id, width = 10, height = 10, mineCount = 10 } = game
 
-    if (games.some(_ => _.id === game.id))
+    const idTaken = await dao.getGameById(id)
+
+    if (idTaken)
       throw new Error()
 
     const board = makeBoard(width, height, mineCount)
@@ -48,11 +65,11 @@ export const Business = ({ games }: Config): Business => {
       lost: false,
     }
 
-    games.push(newGame)
+    await dao.insert(newGame)
   }
 
-  const setGameCell = (userId: string, gameId: string, x: number, y: number, value: CellValue) => {
-    const game = games.find(_ => _.id === gameId)
+  const setGameCell = async (userId: string, gameId: string, x: number, y: number, value: CellValue) => {
+    const game = await dao.getGameById(gameId)
 
     if (!game)
       throw new Error() // TODO: NotFoundError
