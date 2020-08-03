@@ -13,6 +13,7 @@ import { ClientMinesweeper } from './ClientMinesweeper'
 import { Nav } from './Nav'
 import { ServerMinesweeper } from './ServerMinesweeper'
 import { Games } from './Games'
+import { NewGame } from './NewGame'
 
 export default function App() {
   const [background, setBackground] = useState(0)
@@ -61,6 +62,9 @@ export default function App() {
             </Route>
             <Route path="/play/online">
               <Games apiClient={apiClient} />
+            </Route>
+            <Route path="/play">
+              <NewGame apiClient={apiClient} />
             </Route>
             <Route>
               <section className="home">

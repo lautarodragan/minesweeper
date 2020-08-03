@@ -13,22 +13,29 @@ import {
 } from '@taros-minesweeper/lib'
 import { DateTime } from 'luxon'
 import React, {useEffect, useRef, useState} from 'react'
+import { useLocation } from 'react-router-dom'
 
 import { Minesweeper } from './Minesweeper'
-
+function useQuery() {
+  return Object.fromEntries((new URLSearchParams(useLocation().search)).entries())
+}
 export const ClientMinesweeper = () => {
-  const [boardWidth, setBoardWidth] = useState(16)
-  const [boardHeight, setBoardHeight] = useState(16)
-  const [boardMineCount, setBoardMineCount] = useState(40)
-  const [board, setBoard] = useState(makeBoard(boardWidth, boardHeight, boardMineCount))
+  const [board, setBoard] = useState(null)
   const [lostPosition, setLostPosition] = useState(null)
   const [startTime, setStartTime] = useState(null)
   const [gameDuration, setGameDuration] = useState(null)
   const [flagCount, setFlagCount] = useState(0)
   const [won, setWon] = useState(false)
   const gameDurationTimer = useRef(null)
+  const { mines, width, height } = useQuery()
 
   useEffect(() => {
+    onReset()
+  }, [mines, width, height])
+
+  useEffect(() => {
+    if (!board)
+      return
     setFlagCount(getFlagCount(board))
     if (isWon(board)) {
       stopTimeTracker()
@@ -111,13 +118,13 @@ export const ClientMinesweeper = () => {
     setWon(false)
     setStartTime(null)
     setGameDuration(null)
-    setBoard(makeBoard(boardWidth, boardHeight))
+    setBoard(makeBoard(parseInt(width), parseInt(height), parseInt(mines)))
   }
 
-  return (
+  return board &&  (
     <Minesweeper
       board={board}
-      mineCount={boardMineCount}
+      mineCount={mines}
       flagCount={flagCount}
       won={won}
       lostPosition={lostPosition}

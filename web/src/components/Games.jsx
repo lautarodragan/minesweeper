@@ -1,14 +1,12 @@
+import { useAuth0 } from '@auth0/auth0-react'
 import { DateTime } from 'luxon'
 import React, { useState, useEffect } from 'react'
-import { Link, useHistory } from 'react-router-dom'
-import { v4 as uuid } from 'uuid'
+import { Link } from 'react-router-dom'
 
 import './Games.css'
-import {useAuth0} from '@auth0/auth0-react'
 
 export const Games = ({ apiClient }) => {
   const [games, setGames] = useState([])
-  const history = useHistory()
 
   useEffect(() => {
     if (!apiClient)
@@ -16,35 +14,18 @@ export const Games = ({ apiClient }) => {
     apiClient.getGames().then(setGames)
   }, [apiClient])
 
-  const onNewGame = () => {
-    const id = uuid()
-    apiClient.createGameAndGet({
-      id,
-      width: 16,
-      height: 16,
-      mineCount: 40,
-    }).then(() => {
-      history.push(`/play/online/${id}`)
-    })
-  }
-
   return (
     <section className={`games ${ apiClient ? 'signed-in' : 'signed-out' }`}>
       { !apiClient && <SignedOut/> }
-      { apiClient && <SignedIn onNewGame={onNewGame} games={games}/> }
+      { apiClient && <SignedIn games={games}/> }
     </section>
   )
 }
 
-const SignedIn = ({ onNewGame, games }) => (
-  <>
-    <div>
-      <button onClick={onNewGame}>New Game</button>
-    </div>
-    <ul>
-      { games.map(game => <Game game={game}/>)}
-    </ul>
-  </>
+const SignedIn = ({ games }) => (
+  <ul>
+    { games.map(game => <Game game={game}/>)}
+  </ul>
 )
 
 const SignedOut = () => {

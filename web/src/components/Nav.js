@@ -11,8 +11,8 @@ export const Nav = () => {
     <nav>
       { isAuthenticated && <Profile user={user} /> }
       <section className="links">
-        <Link to="/play/offline" >Play Offline</Link>
-        <Link to="/play/online" >Play Online</Link>
+        { isAuthenticated && <Link to="/play/online" >My Games</Link> }
+        <Link to="/play" >New Game</Link>
       </section>
     </nav>
   )
