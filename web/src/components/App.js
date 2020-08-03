@@ -1,4 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react'
+import { ApiClient } from '@taros-minesweeper/client'
 import React, { useState, useEffect } from 'react'
 import {
   BrowserRouter as Router,
@@ -7,8 +8,6 @@ import {
 } from 'react-router-dom'
 
 import './App.css'
-
-import { ApiClient } from '../ApiClient'
 
 import { ClientMinesweeper } from './ClientMinesweeper'
 import { Nav } from './Nav'
