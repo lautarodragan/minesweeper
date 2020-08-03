@@ -8,9 +8,9 @@ import './NewGame.css'
 export const NewGame = ({ apiClient }) => {
   const history = useHistory()
   const [mode, setMode] = useState('offline')
-  const [mines, setMines] = useState(5)
-  const [width, setWidth] = useState(5)
-  const [height, setHeight] = useState(5)
+  const [mines, setMines] = useState(40)
+  const [width, setWidth] = useState(16)
+  const [height, setHeight] = useState(16)
   const authRequired = mode === 'online' && !apiClient
 
   const onClick = () => {
