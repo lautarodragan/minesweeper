@@ -17,7 +17,6 @@ import { Games } from './Games'
 
 export default function App() {
   const [background, setBackground] = useState(0)
-  const [cheatSeeMines, setCheatSeeMines] = useState(false)
   const { isAuthenticated, getAccessTokenSilently } = useAuth0()
   const [accessToken, setAccessToken] = useState('')
   const [apiClient, setApiClient] = useState(null)
@@ -56,10 +55,10 @@ export default function App() {
           <Nav/>
           <Switch>
             <Route path="/play/offline">
-              <ClientMinesweeper cheatSeeMines={cheatSeeMines} />
+              <ClientMinesweeper />
             </Route>
             <Route path="/play/online/:id">
-              <ServerMinesweeper apiClient={apiClient} cheatSeeMines={cheatSeeMines} />
+              <ServerMinesweeper apiClient={apiClient} />
             </Route>
             <Route path="/play/online">
               <Games apiClient={apiClient} />
@@ -70,7 +69,6 @@ export default function App() {
               </section>
             </Route>
           </Switch>
-          <Toolbar cheatSeeMines={cheatSeeMines} onCheatSeeMines={setCheatSeeMines} />
         </section>
 
         <style>{`
@@ -82,12 +80,3 @@ export default function App() {
     </Router>
   )
 }
-
-const Toolbar = ({ cheatSeeMines, onCheatSeeMines }) => (
-  <section className="toolbar">
-    <div className="checkbox">
-      <input id="cheat-see-mines" type="checkbox" value={cheatSeeMines} onChange={() => onCheatSeeMines(!cheatSeeMines)} />
-      <label htmlFor="cheat-see-mines">Cheat: See Mines</label>
-    </div>
-  </section>
-)

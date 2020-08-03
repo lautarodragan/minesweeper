@@ -7,7 +7,6 @@ export const Minesweeper = ({
   flagCount,
   won,
   lostPosition,
-  cheatSeeMines,
   gameDuration,
   onReset,
   onReveal,
@@ -15,6 +14,7 @@ export const Minesweeper = ({
   onFlag,
 }) => {
   const [sweeperPosition, setSweeperPosition] = useState(null)
+  const [cheatSeeMines, setCheatSeeMines] = useState(false)
 
   const getClassNameForSmiley = () => {
     if (lostPosition)
@@ -112,6 +112,7 @@ export const Minesweeper = ({
           }
         </section>
       </section>
+      <Toolbar cheatSeeMines={cheatSeeMines} onCheatSeeMines={setCheatSeeMines} />
       <style>{`
         section.board {
           grid-template-columns: repeat(${board[0].length}, 1fr);
@@ -129,3 +130,12 @@ const getCellText = (board, x, y) => {
     return ''
   return surroundingMineCount
 }
+
+const Toolbar = ({ cheatSeeMines, onCheatSeeMines }) => (
+  <section className="toolbar">
+    <div className="checkbox">
+      <input id="cheat-see-mines" type="checkbox" value={cheatSeeMines} onChange={() => onCheatSeeMines(!cheatSeeMines)} />
+      <label htmlFor="cheat-see-mines">Cheat: See Mines</label>
+    </div>
+  </section>
+)

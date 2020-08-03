@@ -16,7 +16,7 @@ import React, {useEffect, useRef, useState} from 'react'
 
 import { Minesweeper } from './Minesweeper'
 
-export const ClientMinesweeper = ({ cheatSeeMines }) => {
+export const ClientMinesweeper = () => {
   const [boardWidth, setBoardWidth] = useState(16)
   const [boardHeight, setBoardHeight] = useState(16)
   const [boardMineCount, setBoardMineCount] = useState(40)
@@ -121,7 +121,6 @@ export const ClientMinesweeper = ({ cheatSeeMines }) => {
       flagCount={flagCount}
       won={won}
       lostPosition={lostPosition}
-      cheatSeeMines={cheatSeeMines}
       gameDuration={gameDuration}
       onReset={onReset}
       onReveal={onReveal}

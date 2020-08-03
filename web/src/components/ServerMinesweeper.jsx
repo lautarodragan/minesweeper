@@ -10,7 +10,7 @@ import { v4 as uuid } from 'uuid'
 
 import { Minesweeper } from './Minesweeper'
 
-export const ServerMinesweeper = ({ apiClient, cheatSeeMines }) => {
+export const ServerMinesweeper = ({ apiClient }) => {
   const [boardWidth, setBoardWidth] = useState(16)
   const [boardHeight, setBoardHeight] = useState(16)
   const [boardMineCount, setBoardMineCount] = useState(40)
@@ -97,7 +97,6 @@ export const ServerMinesweeper = ({ apiClient, cheatSeeMines }) => {
             flagCount={flagCount}
             won={game.won}
             lostPosition={game.lostPosition}
-            cheatSeeMines={cheatSeeMines}
             gameDuration={gameDuration}
             onReset={onReset}
             onReveal={onReveal}
