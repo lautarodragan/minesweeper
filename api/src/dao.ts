@@ -1,7 +1,6 @@
+import { Game } from '@taros-minesweeper/client'
 import { Board, Coord } from '@taros-minesweeper/lib'
 import { Collection } from 'mongodb'
-
-import { Game } from './game'
 
 interface DaoConfig {
   readonly collection: Collection<Game>

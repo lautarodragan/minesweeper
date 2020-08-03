@@ -1,3 +1,4 @@
+import { Game } from '@taros-minesweeper/client'
 import {
   makeBoard,
   CellValue,
@@ -9,7 +10,6 @@ import {
   isWon,
 } from '@taros-minesweeper/lib'
 
-import { Game } from './game'
 import { Dao } from './dao'
 
 interface Config {
