@@ -31,22 +31,30 @@ export const ServerMinesweeper = ({ apiClient }) => {
     if (!game)
       return
     setFlagCount(getFlagCount(game.board))
-    if (game.won || game.lost) {
+    if (game.endDate) {
       stopTimeTracker()
+    } else {
+      startTimeTracker()
     }
   }, [game])
 
   const startTimeTracker = () => {
-    const startTime = DateTime.utc()
+    const startTime = DateTime.fromISO(game.creationDate)
     setStartTime(startTime)
-    gameDurationTimer.current = setInterval(() => {
-      setGameDuration(startTime.diffNow().negate().toFormat('mm:ss'))
-    }, 1000)
+    setGameDuration(startTime.diffNow().negate().toFormat('mm:ss'))
+    if (!gameDurationTimer.current) {
+      gameDurationTimer.current = setInterval(() => {
+        setGameDuration(startTime.diffNow().negate().toFormat('mm:ss'))
+      }, 1000)
+    }
   }
 
   const stopTimeTracker = () => {
-    clearInterval(gameDurationTimer.current)
-    gameDurationTimer.current = null
+    if (gameDurationTimer.current) {
+      clearInterval(gameDurationTimer.current)
+      gameDurationTimer.current = null
+    }
+    setGameDuration(DateTime.fromISO(game.creationDate).diff(DateTime.fromISO(game.endDate)).negate().toFormat('mm:ss'))
   }
 
   const onReveal = (x, y, value) => {

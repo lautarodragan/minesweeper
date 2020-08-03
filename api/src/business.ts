@@ -68,13 +68,16 @@ export const Business = ({ games }: Config): Business => {
         if (lost) {
           game.lost = true
           game.lostPosition = { x, y }
+          game.endDate = new Date().toISOString()
           return
         }
 
         const newBoard = reveal(game.board, x, y)
 
-        if (isWon(newBoard))
+        if (isWon(newBoard)) {
           game.won = true
+          game.endDate = new Date().toISOString()
+        }
 
         game.board = newBoard
       } else if (cellValue === CellValue.KnownClear) {

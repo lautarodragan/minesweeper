@@ -69,9 +69,15 @@ const Game = ({ game }) => {
       <div>Mines: { game.mineCount }</div>
       <div>Status: { status }</div>
       <div>Started: { time }</div>
+      { status !== 'Started' && <div>Duration: {duration(game.creationDate, game.endDate)}</div> }
       <Link to={'/play/online/' + game.id}>{ status === 'Started' ? 'Play' : 'Open' }</Link>
     </li>
   )
+}
+
+const duration = (start, end) => {
+  const duration = DateTime.fromISO(start).diff(DateTime.fromISO(end)).negate().shiftTo('minutes', 'seconds').toObject()
+  return `${Math.floor(duration.minutes)}m ${Math.floor(duration.seconds)}s`
 }
 
 const durationAgo = (time) => {
