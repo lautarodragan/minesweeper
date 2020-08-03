@@ -1,4 +1,4 @@
-import { Coord } from '@taros-minesweeper/lib'
+import { Board, Coord } from '@taros-minesweeper/lib'
 
 export interface Game {
   readonly userId: string
@@ -8,7 +8,7 @@ export interface Game {
   readonly width: number
   readonly height: number
   readonly mineCount: number
-  readonly board: any
+  readonly board: Board
   readonly lost: boolean
   readonly lostPosition?: Coord
   readonly won: boolean
