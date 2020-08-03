@@ -36,18 +36,14 @@ export const NewGame = ({ apiClient }) => {
         <div className={mode === 'online' ? 'active' : ''} onClick={() => setMode('online')}>Play Online</div>
       </div>
       <ModeDescription mode={mode} isLoggedIn={!!apiClient} />
-      { !authRequired && <div className="difficulty">
-        <div>
-          <span>Mines:</span>
-          <input type="number" min={5} max={900} value={mines} onChange={(event) => setMines(event.currentTarget.value)} />
-        </div>
-        <div>
-          <span>Size:</span>
-          <input type="number" min={5} max={100} value={width} onChange={(event) => setWidth(event.currentTarget.value)} />
-          <span> by </span>
-          <input type="number" min={5} max={100} value={height} onChange={(event) => setHeight(event.currentTarget.value)} />
-        </div>
-      </div>}
+      { !authRequired && <Difficulty
+        mines={mines}
+        onMines={setMines}
+        width={width}
+        onWidth={setWidth}
+        height={height}
+        onHeight={setHeight}
+      />}
       { !authRequired && <button className="start" onClick={onClick}>Start</button>}
     </section>
   )
@@ -79,3 +75,24 @@ const ModeDescriptionOnLine = ({ isLoggedIn }) => {
   )
 }
 
+const Difficulty = ({
+  mines,
+  onMines,
+  width,
+  onWidth,
+  height,
+  onHeight,
+}) => (
+  <div className="difficulty">
+    <div>
+      <span>Mines:</span>
+      <input type="number" min={5} max={900} value={mines} onChange={(event) => onMines(event.currentTarget.value)} />
+    </div>
+    <div>
+      <span>Size:</span>
+      <input type="number" min={5} max={100} value={width} onChange={(event) => onWidth(event.currentTarget.value)} />
+      <span> by </span>
+      <input type="number" min={5} max={100} value={height} onChange={(event) => onHeight(event.currentTarget.value)} />
+    </div>
+  </div>
+)
