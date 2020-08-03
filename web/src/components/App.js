@@ -55,14 +55,14 @@ export default function App() {
         <section className="game">
           <Nav/>
           <Switch>
-            <Route path="/games">
-              <Games apiClient={apiClient} />
-            </Route>
             <Route path="/play/offline">
               <ClientMinesweeper cheatSeeMines={cheatSeeMines} />
             </Route>
-            <Route path="/play/online">
+            <Route path="/play/online/:id">
               <ServerMinesweeper apiClient={apiClient} cheatSeeMines={cheatSeeMines} />
+            </Route>
+            <Route path="/play/online">
+              <Games apiClient={apiClient} />
             </Route>
             <Route>
               <section className="home">

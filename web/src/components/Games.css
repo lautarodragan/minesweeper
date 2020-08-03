@@ -1,11 +1,16 @@
-ul.games {
-  margin: 0;
+section.games {
   background-color: #c0c0c0;
+  padding: 10px 40px;
+}
+
+section.games ul {
+  margin: 0;
+  padding: 0;
   list-style: none;
   max-height: 50vh;
   overflow: auto;
 }
 
-ul.games li {
+section.games ul li {
   padding: 8px;
 }

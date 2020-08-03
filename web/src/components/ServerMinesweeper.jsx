@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import {
   CellValue,
   getFlagCount,
@@ -18,10 +19,13 @@ export const ServerMinesweeper = ({ apiClient, cheatSeeMines }) => {
   const [flagCount, setFlagCount] = useState(0)
   const gameDurationTimer = useRef(null)
   const [game, setGame] = useState(null)
+  const { id } = useParams()
 
   useEffect(() => {
-    onReset()
-  }, [])
+    if (!apiClient)
+      return
+    apiClient.getGame(id).then(setGame)
+  }, [apiClient])
 
   useEffect(() => {
     if (!game)
