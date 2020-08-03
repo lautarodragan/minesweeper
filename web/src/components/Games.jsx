@@ -1,4 +1,3 @@
-import { useAuth0 } from '@auth0/auth0-react'
 import { DateTime } from 'luxon'
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
@@ -16,28 +15,10 @@ export const Games = ({ apiClient }) => {
 
   return (
     <section className={`games ${ apiClient ? 'signed-in' : 'signed-out' }`}>
-      { !apiClient && <SignedOut/> }
-      { apiClient && <SignedIn games={games}/> }
+      <ul>
+        { games.map(game => <Game game={game}/>)}
+      </ul>
     </section>
-  )
-}
-
-const SignedIn = ({ games }) => (
-  <ul>
-    { games.map(game => <Game game={game}/>)}
-  </ul>
-)
-
-const SignedOut = () => {
-  const { loginWithRedirect } = useAuth0()
-
-  return (
-    <>
-      <p>
-        You need to log in or sign up in order to play online. It only takes a few seconds.
-      </p>
-      <button onClick={() => loginWithRedirect()}>Log In / Sign Up</button>
-    </>
   )
 }
 
