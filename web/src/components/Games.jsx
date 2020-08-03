@@ -4,6 +4,7 @@ import { Link, useHistory } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
 
 import './Games.css'
+import {useAuth0} from '@auth0/auth0-react'
 
 export const Games = ({ apiClient }) => {
   const [games, setGames] = useState([])
@@ -28,14 +29,34 @@ export const Games = ({ apiClient }) => {
   }
 
   return (
-    <section className="games">
-      <div>
-        <button onClick={onNewGame}>New Game</button>
-      </div>
-      <ul>
-        { games.map(game => <Game game={game}/>)}
-      </ul>
+    <section className={`games ${ apiClient ? 'signed-in' : 'signed-out' }`}>
+      { !apiClient && <SignedOut/> }
+      { apiClient && <SignedIn onNewGame={onNewGame} games={games}/> }
     </section>
+  )
+}
+
+const SignedIn = ({ onNewGame, games }) => (
+  <>
+    <div>
+      <button onClick={onNewGame}>New Game</button>
+    </div>
+    <ul>
+      { games.map(game => <Game game={game}/>)}
+    </ul>
+  </>
+)
+
+const SignedOut = () => {
+  const { loginWithRedirect } = useAuth0()
+
+  return (
+    <>
+      <p>
+        You need to log in or sign up in order to play online. It only takes a few seconds.
+      </p>
+      <button onClick={() => loginWithRedirect()}>Log In / Sign Up</button>
+    </>
   )
 }
 

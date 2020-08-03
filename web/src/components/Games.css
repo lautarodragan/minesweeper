@@ -3,6 +3,13 @@ section.games {
   padding: 10px 40px;
 }
 
+section.games.signed-out {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 section.games ul {
   margin: 0;
   padding: 0;

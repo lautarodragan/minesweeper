@@ -9,7 +9,6 @@ export const Nav = () => {
 
   return (
     <nav>
-      { !isAuthenticated && <LoginButton /> }
       { isAuthenticated && <Profile user={user} /> }
       <section className="links">
         <Link to="/play/offline" >Play Offline</Link>
@@ -17,11 +16,6 @@ export const Nav = () => {
       </section>
     </nav>
   )
-}
-
-const LoginButton = () => {
-  const { loginWithRedirect } = useAuth0()
-  return <button onClick={() => loginWithRedirect()}>Log In</button>
 }
 
 const LogoutButton = () => {
