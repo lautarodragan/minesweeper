@@ -28,7 +28,7 @@ If the tile was clear, meaning it had no mine in it, it'll be marked so. This me
 
 Revealed clear tiles may display a number in them. This is the number of mines immediately surrounding said tile. Use this information to your advantage.
 
-### Flags
+### ⛳ Flags
 
 Right-click on an unrevealed tile you suspect has a mine in it to flag it.
 
