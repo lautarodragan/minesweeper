@@ -47,5 +47,11 @@ export const setHasFlag = (value: number, hasFlag: boolean) =>
 export const setSurroundingMineCount = (value: number, surroundingMineCount: number) =>
   value & (~surroundingMineCountMask & 0xFF) | surroundingMineCount << 3
 
+export const getAll = (tile: number): Tile => ({
+  isRevealed: isRevealed(tile),
+  hasMine: hasMine(tile),
+  hasFlag: hasFlag(tile),
+})
+
 export const setAll = (tile: Tile) =>
   setHasFlag(setHasMine(setIsRevealed(0, tile.isRevealed), tile.hasMine), tile.hasFlag)

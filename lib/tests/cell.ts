@@ -11,6 +11,7 @@ import {
   setHasMine,
   setIsRevealed,
   setSurroundingMineCount,
+  getAll, Tile,
 } from '../src/cell'
 
 describe('tile bitwise operators — basic tests', () => {
@@ -93,6 +94,54 @@ describe('tile bitwise operators — setSurroundingCount', () => {
 
   it('mixed, surrounding 1', () => {
     expect(surroundingMineCount(setSurroundingMineCount(setAll({ isRevealed: true, hasMine: false, hasFlag: true }), 1))).to.equal(1)
+  })
+
+})
+
+describe('tile bitwise operators — getAll', () => {
+
+  it('basic', () => {
+    const tile: Tile = {
+      isRevealed: false,
+      hasFlag: true,
+      hasMine: true,
+    }
+    const serializedTile = setAll(tile)
+    const deserializedTile = getAll(serializedTile)
+    expect(deserializedTile).to.deep.equal(tile)
+  })
+
+  it('with setIsRevealed', () => {
+    const tile = setAll({
+      isRevealed: false,
+      hasFlag: true,
+      hasMine: true,
+    })
+    const modifiedTile = setIsRevealed(tile, true)
+    const deserializedTile = getAll(modifiedTile)
+    expect(deserializedTile).to.deep.equal({ isRevealed: true, hasFlag: true, hasMine: true })
+  })
+
+  it('with setHasMine', () => {
+    const tile = setAll({
+      isRevealed: false,
+      hasFlag: true,
+      hasMine: true,
+    })
+    const modifiedTile = setHasMine(tile, false)
+    const deserializedTile = getAll(modifiedTile)
+    expect(deserializedTile).to.deep.equal({ isRevealed: false, hasFlag: true, hasMine: false })
+  })
+
+  it('with setHasMine', () => {
+    const tile = setAll({
+      isRevealed: false,
+      hasFlag: true,
+      hasMine: true,
+    })
+    const modifiedTile = setHasMine(tile, false)
+    const deserializedTile = getAll(modifiedTile)
+    expect(deserializedTile).to.deep.equal({ isRevealed: false, hasFlag: true, hasMine: false })
   })
 
 })
