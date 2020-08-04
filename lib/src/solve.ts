@@ -1,4 +1,4 @@
-import { CellValue } from './cell'
+import { isRevealed, setIsRevealed } from './cell'
 import { Board, cloneBoard, getSurroundingMineCount } from './board'
 
 export const reveal = (board: Board, x: number, y: number): Board => {
@@ -11,10 +11,13 @@ export const reveal = (board: Board, x: number, y: number): Board => {
     if (!isInBounds(x, y, width, height))
       return
 
-    if (newBoard[y][x] !== CellValue.UnknownClear)
+    // if (newBoard[y][x] !== CellValue.UnknownClear)
+    //   return
+
+    if (isRevealed(newBoard[y][x]))
       return
 
-    newBoard[y][x] = CellValue.KnownClear
+    newBoard[y][x] = setIsRevealed(newBoard[y][x], true)
 
     if (getSurroundingMineCount(board, x, y))
       return
