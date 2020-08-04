@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import 'mocha'
 
 import {
+  Tile,
   hasFlag,
   hasMine,
   isRevealed,
@@ -11,7 +12,8 @@ import {
   setHasMine,
   setIsRevealed,
   setSurroundingMineCount,
-  getAll, Tile,
+  getAll,
+  toggleFlag,
 } from '../src/cell'
 
 describe('tile bitwise operators — basic tests', () => {
@@ -143,5 +145,23 @@ describe('tile bitwise operators — getAll', () => {
     const deserializedTile = getAll(modifiedTile)
     expect(deserializedTile).to.deep.equal({ isRevealed: false, hasFlag: true, hasMine: false })
   })
+
+})
+
+describe('tile bitwise operators — toggleFlag', () => {
+
+  it('works', () => {
+    const tile: Tile = {
+      isRevealed: false,
+      hasFlag: true,
+      hasMine: true,
+    }
+    const serializedTile = setAll(tile)
+
+    expect(hasFlag(serializedTile)).to.deep.equal(tile.hasFlag)
+    expect(hasFlag(toggleFlag(serializedTile))).to.deep.equal(!tile.hasFlag)
+    expect(hasFlag(toggleFlag(toggleFlag(serializedTile)))).to.deep.equal(hasFlag(serializedTile))
+  })
+
 
 })

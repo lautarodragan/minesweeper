@@ -1,27 +1,3 @@
-export enum CellValue {
-  UnknownClear,
-  UnknownMine,
-  KnownClear,
-  KnownMine,
-  UnknownClearFlag,
-  UnknownMineFlag,
-}
-
-export const toggleFlag = (value: CellValue): CellValue => {
-  if (value === CellValue.UnknownClear)
-    return CellValue.UnknownClearFlag
-  else if (value === CellValue.UnknownMine)
-    return CellValue.UnknownMineFlag
-  else if (value === CellValue.UnknownClearFlag)
-    return CellValue.UnknownClear
-  else if (value === CellValue.UnknownMineFlag)
-    return CellValue.UnknownMine
-  throw new Error("This cell can't be flagged.")
-}
-
-export const isUnknown = (value: CellValue): boolean =>
-  [CellValue.UnknownClear, CellValue.UnknownMine, CellValue.UnknownClearFlag, CellValue.UnknownMineFlag].includes(value)
-
 export interface Tile {
   readonly isRevealed: boolean
   readonly hasMine: boolean
@@ -46,6 +22,8 @@ export const setHasFlag = (value: number, hasFlag: boolean) =>
   hasFlag ? value | hasFlagMask : (value & (~hasFlagMask & 0xFF))
 export const setSurroundingMineCount = (value: number, surroundingMineCount: number) =>
   value & (~surroundingMineCountMask & 0xFF) | surroundingMineCount << 3
+
+export const toggleFlag = (value: number): number => value ^ hasFlagMask
 
 export const getAll = (tile: number): Tile => ({
   isRevealed: isRevealed(tile),
