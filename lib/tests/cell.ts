@@ -161,6 +161,9 @@ describe('tile bitwise operators — toggleFlag', () => {
     expect(hasFlag(serializedTile)).to.deep.equal(tile.hasFlag)
     expect(hasFlag(toggleFlag(serializedTile))).to.deep.equal(!tile.hasFlag)
     expect(hasFlag(toggleFlag(toggleFlag(serializedTile)))).to.deep.equal(hasFlag(serializedTile))
+    expect(isRevealed(toggleFlag(serializedTile))).to.deep.equal(isRevealed(serializedTile))
+    expect(hasMine(toggleFlag(serializedTile))).to.deep.equal(hasMine(serializedTile))
+
   })
 
 
