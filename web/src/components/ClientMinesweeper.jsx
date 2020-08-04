@@ -1,5 +1,4 @@
 import {
-  CellValue,
   getFlagCount,
   getSurroundingFlagCount,
   getSurroundingMineCount,
@@ -10,15 +9,19 @@ import {
   reveal,
   sweep,
   toggleFlag,
+  isRevealed,
+  hasMine,
 } from '@taros-minesweeper/lib'
 import { DateTime } from 'luxon'
 import React, {useEffect, useRef, useState} from 'react'
 import { useLocation } from 'react-router-dom'
 
 import { Minesweeper } from './Minesweeper'
+
 function useQuery() {
   return Object.fromEntries((new URLSearchParams(useLocation().search)).entries())
 }
+
 export const ClientMinesweeper = () => {
   const [board, setBoard] = useState(null)
   const [lostPosition, setLostPosition] = useState(null)
@@ -71,11 +74,14 @@ export const ClientMinesweeper = () => {
     if (won || lostPosition)
       return
 
-    if (value === CellValue.UnknownClear) {
+    if (isRevealed(value))
+      return
+
+    if (!hasMine(value)) {
       if (startTime === null)
         startTimeTracker()
       setBoard(reveal(board, x, y))
-    } else if (value === CellValue.UnknownMine) {
+    } else {
       lose({ x, y })
     }
   }
