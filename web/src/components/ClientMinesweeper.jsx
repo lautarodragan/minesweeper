@@ -2,7 +2,6 @@ import {
   getFlagCount,
   getSurroundingFlagCount,
   getSurroundingMineCount,
-  isUnknown,
   isWon,
   makeBoard,
   mapBoard,
@@ -112,7 +111,7 @@ export const ClientMinesweeper = () => {
     if (won || lostPosition)
       return
 
-    if (!isUnknown(board[y][x]))
+    if (isRevealed(board[y][x]))
       return
 
     setCell(x, y, toggleFlag(board[y][x]))
