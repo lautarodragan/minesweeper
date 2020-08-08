@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
-  CellValue,
   getFlagCount,
-  isUnknown,
+  isRevealed,
+  hasFlag,
+  setIsRevealed,
+  setHasFlag,
 } from '@taros-minesweeper/lib'
 import { DateTime } from 'luxon'
 import { v4 as uuid } from 'uuid'
@@ -61,15 +63,15 @@ export const ServerMinesweeper = ({ apiClient }) => {
     if (game.won || game.lost)
       return
 
-    if (value === CellValue.UnknownClear || value === CellValue.UnknownMine) {
+    if (!hasFlag(value)) {
       if (startTime === null)
         startTimeTracker()
-      apiClient.setCellAndGet(game.id, x, y, CellValue.KnownClear).then(setGame)
+      apiClient.setCellAndGet(game.id, x, y, setIsRevealed(0, true)).then(setGame)
     }
   }
 
   const onSweep = (x, y, value) => {
-    apiClient.setCellAndGet(game.id, x, y, CellValue.KnownClear).then(setGame)
+    apiClient.setCellAndGet(game.id, x, y, setIsRevealed(0, true)).then(setGame)
   }
 
   const onFlag = (x, y) => (event) => {
@@ -78,10 +80,10 @@ export const ServerMinesweeper = ({ apiClient }) => {
     if (game.won || game.lost)
       return
 
-    if (!isUnknown(game.board[y][x]))
+    if (isRevealed(game.board[y][x]))
       return
 
-    apiClient.setCellAndGet(game.id, x, y, CellValue.UnknownMineFlag).then(setGame)
+    apiClient.setCellAndGet(game.id, x, y, setHasFlag(0, 1)).then(setGame)
   }
 
   const onReset = () => {
