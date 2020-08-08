@@ -11,9 +11,6 @@ export const reveal = (board: Board, x: number, y: number): Board => {
     if (!isInBounds(x, y, width, height))
       return
 
-    // if (newBoard[y][x] !== CellValue.UnknownClear)
-    //   return
-
     if (isRevealed(newBoard[y][x]))
       return
 
