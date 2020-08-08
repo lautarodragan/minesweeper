@@ -29,6 +29,8 @@ export const Minesweeper = ({
   const getClassNameForCell = (x, y, value) => {
     if (lostPosition && lostPosition.x === x && lostPosition.y === y)
       return 'lost'
+    if (lostPosition && hasMine(value))
+      return 'mine'
     if (!isRevealed(value) && !hasFlag(value)
       && sweeperPosition
       && sweeperPosition.x >= x - 1
@@ -36,10 +38,8 @@ export const Minesweeper = ({
       && sweeperPosition.y >= y - 1
       && sweeperPosition.y <= y + 1)
       return 'clear'
-    if (lostPosition && hasMine(value))
-      return 'mine'
-    if (!lostPosition && hasMine(value))
-      return cheatSeeMines ? 'unknown mine' : 'unknown'
+    if (cheatSeeMines && hasMine(value))
+      return 'unknown mine'
     if (hasFlag(value))
       return 'unknown flag'
     if (isRevealed(value))
