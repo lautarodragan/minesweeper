@@ -19,14 +19,10 @@ export const reveal = (board: Board, x: number, y: number): Board => {
     if (getSurroundingMineCount(board, x, y))
       return
 
-    recursive(x, y - 1)
-    recursive(x + 1, y - 1)
-    recursive(x + 1, y)
-    recursive(x + 1, y + 1)
-    recursive(x, y + 1)
-    recursive(x - 1, y + 1)
-    recursive(x - 1, y)
-    recursive(x - 1, y - 1)
+    for (let i = x - 1; i < x + 2; i++)
+      for (let j = y - 1; j < y + 2; j++)
+        if (i !== x || j !== y)
+          recursive(i, j)
   }
 
   recursive(x, y)
