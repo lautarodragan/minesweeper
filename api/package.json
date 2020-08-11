@@ -27,7 +27,7 @@
     "@koa/cors": "3.1.0",
     "@koa/router": "9.3.1",
     "@taros-minesweeper/client": "1.0.0",
-    "@taros-minesweeper/lib": "1.0.1",
+    "@taros-minesweeper/lib": "1.1.0",
     "koa": "2.13.0",
     "koa-bodyparser": "4.3.0",
     "koa-jwt": "4.0.0",
