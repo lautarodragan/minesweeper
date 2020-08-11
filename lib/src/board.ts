@@ -3,7 +3,7 @@ import { Coord } from './coord'
 
 export type Board = number[][]
 
-export const makeEmptyBoard = (width: number, height: number): Board => Array(width).fill(null).map(y => Array(height).fill(0))
+export const makeEmptyBoard = (width: number, height: number): Board => Array(height).fill(null).map(y => Array(width).fill(0))
 
 export const mapBoard = (board: Board, callback: (x: number, y: number, value: number) => number) =>
   board.map(
