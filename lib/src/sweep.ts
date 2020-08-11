@@ -1,6 +1,6 @@
 import { hasFlag, hasMine, isRevealed } from './cell'
 import { Board, cloneBoard } from './board'
-import { reveal } from './solve'
+import { reveal } from './reveal'
 import { Coord } from './coord'
 
 type Sweep = {
