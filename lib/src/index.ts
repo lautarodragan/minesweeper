@@ -1,5 +1,5 @@
 export * from './board'
 export * from './cell'
-export * from './solve'
+export * from './reveal'
 export * from './sweep'
 export * from './coord'
