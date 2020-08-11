@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { CellValue, getSurroundingMineCount } from '@taros-minesweeper/lib'
+import { getSurroundingMineCount, isRevealed, hasFlag, hasMine } from '@taros-minesweeper/lib'
 
 export const Minesweeper = ({
   board,
@@ -29,21 +29,21 @@ export const Minesweeper = ({
   const getClassNameForCell = (x, y, value) => {
     if (lostPosition && lostPosition.x === x && lostPosition.y === y)
       return 'lost'
-    if ((value === CellValue.UnknownMine || value === CellValue.UnknownClear)
+    if (lostPosition && hasMine(value))
+      return 'mine'
+    if (!isRevealed(value) && !hasFlag(value)
       && sweeperPosition
       && sweeperPosition.x >= x - 1
       && sweeperPosition.x <= x + 1
       && sweeperPosition.y >= y - 1
       && sweeperPosition.y <= y + 1)
       return 'clear'
-    if (lostPosition && value === CellValue.UnknownMine)
-      return 'mine'
-    if (!lostPosition && value === CellValue.UnknownMine)
-      return cheatSeeMines ? 'unknown mine' : 'unknown'
-    if (value === CellValue.KnownClear)
-      return 'clear'
-    if (value === CellValue.UnknownClearFlag || value === CellValue.UnknownMineFlag)
+    if (cheatSeeMines && hasMine(value))
+      return 'unknown mine'
+    if (hasFlag(value))
       return 'unknown flag'
+    if (isRevealed(value))
+      return 'clear'
     return 'unknown'
   }
 
@@ -76,9 +76,9 @@ export const Minesweeper = ({
     setSweeperPosition(null)
 
     if (event.button === 0) {
-      if (value === CellValue.UnknownClear || value === CellValue.UnknownMine)
+      if (!isRevealed(value))
         onReveal(x, y, value)
-      else if (value === CellValue.KnownClear)
+      else
         onSweep(x, y, value)
     }
   }
@@ -123,7 +123,7 @@ export const Minesweeper = ({
 }
 
 const getCellText = (board, x, y) => {
-  if (board[y][x] !== CellValue.KnownClear)
+  if (!isRevealed(board[y][x]) || hasMine(board[y][x]))
     return ''
   const surroundingMineCount = getSurroundingMineCount(board, x, y)
   if (surroundingMineCount < 1)

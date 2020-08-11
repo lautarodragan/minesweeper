@@ -1,13 +1,15 @@
 import { Game } from '@taros-minesweeper/client'
 import {
   makeBoard,
-  CellValue,
   toggleFlag,
   sweep,
   getSurroundingFlagCount,
   getSurroundingMineCount,
   reveal,
   isWon,
+  isRevealed,
+  hasFlag,
+  hasMine,
 } from '@taros-minesweeper/lib'
 
 import { Dao } from './dao'
@@ -20,7 +22,7 @@ export interface Business {
   readonly getGames: (userId: string) => Promise<readonly Omit<Game, 'board'>[]>
   readonly getGameById: (userId: string, id: string) => Promise<Game | undefined>
   readonly createGame: (game: Game) => Promise<void>
-  readonly setGameCell: (userId: string, gameId: string, x: number, y: number, value: CellValue) => Promise<void>
+  readonly setGameCell: (userId: string, gameId: string, x: number, y: number, value: number) => Promise<void>
 }
 
 export const Business = ({ dao }: Config): Business => {
@@ -66,7 +68,7 @@ export const Business = ({ dao }: Config): Business => {
     await dao.insert(newGame)
   }
 
-  const setGameCell = async (userId: string, gameId: string, x: number, y: number, value: CellValue) => {
+  const setGameCell = async (userId: string, gameId: string, x: number, y: number, value: number) => {
     const game = await dao.getGameById(gameId)
 
     if (!game)
@@ -76,12 +78,11 @@ export const Business = ({ dao }: Config): Business => {
       throw new Error() // TODO: UnauthorizedError
 
     const cellValue = game.board[y][x]
-    if (value === CellValue.KnownClear) {
-      if (cellValue === CellValue.UnknownClear || cellValue === CellValue.UnknownMine) {
+    if (isRevealed(value)) {
+      if (!isRevealed(cellValue)) {
         // Reveal
-        const lost = cellValue === CellValue.UnknownMine
 
-        if (lost) {
+        if (hasMine(cellValue)) {
           await dao.setLost(game.id, { x, y })
           return
         }
@@ -92,7 +93,7 @@ export const Business = ({ dao }: Config): Business => {
           await dao.setWon(game.id)
 
         await dao.setBoard(game.id, newBoard)
-      } else if (cellValue === CellValue.KnownClear) {
+      } else {
         // Sweep
         const surroundingMineCount = getSurroundingMineCount(game.board, x, y)
         const surroundingFlagCount = getSurroundingFlagCount(game.board, x, y)
@@ -107,7 +108,7 @@ export const Business = ({ dao }: Config): Business => {
         }
 
       }
-    } else if (value === CellValue.UnknownMineFlag) {
+    } else if (hasFlag(value)) {
       // Toggle Flag
       game.board[y][x] = toggleFlag(cellValue)
       await dao.setBoard(game.id, game.board)
