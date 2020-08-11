@@ -5,7 +5,7 @@
   "dependencies": {
     "@auth0/auth0-react": "1.0.0",
     "@taros-minesweeper/client": "1.0.1",
-    "@taros-minesweeper/lib": "1.1.0",
+    "@taros-minesweeper/lib": "1.1.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
