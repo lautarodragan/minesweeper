@@ -2,7 +2,7 @@
 
 Solution to the Amazon challenge.
 
-Deployed and playable at https://minesweeper.tarokun.io/.
+Deployed and playable at https://minesweeper.taro.codes/.
 
 The game has two modes:
 - 💾 Offline mode: runs completely in the browser. It's way faster, but has no persistence and can be cheated easily. If I added a highscore screen, offline games wouldn't count.
